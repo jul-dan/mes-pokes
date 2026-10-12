@@ -1,7 +1,7 @@
 {
   "name": "Mes p'tits compagnons",
   "short_name": "Compagnons",
-  "description": "Jeu éducatif de maternelle (petite et moyenne section) avec des compagnons à faire évoluer.",
+  "description": "Jeu éducatif de maternelle : des compagnons qui évoluent, des combats amicaux et des cartes à collectionner.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",
@@ -10,8 +10,29 @@
   "background_color": "#bfe6ff",
   "theme_color": "#8b6cf0",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
