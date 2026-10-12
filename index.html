@@ -274,6 +274,35 @@ button{font-family:inherit;color:inherit}
 @media (min-width:600px){#app{box-shadow:0 0 0 1px rgba(255,255,255,.4),0 20px 60px rgba(45,35,80,.15)}}
 @media (max-height:640px){.stage{gap:20px}.play{height:90px}.square{height:84px}}
 @media (max-height:720px){.pet{max-height:31vh}.pet-name{font-size:18px}.home-actions{gap:10px}.home-stage{gap:4px}.lbl{font-size:12px;margin-top:2px}}
+
+/* ====== animations des nouvelles créatures ====== */
+.crt .xeye{display:none}.crt.hurt .eye{display:none}.crt.hurt .xeye{display:inline}
+.crt.atk .mo-happy,.crt.hurt .mo-happy{display:inline}.crt.atk .mo-calm,.crt.hurt .mo-calm{display:none}
+.crt .cr-breath{animation:breath 3.2s ease-in-out infinite;transform-box:view-box;transform-origin:100px 182px}
+.crt .cr-tail,.crt .cr-wing,.crt .cr-ear,.crt .cr-arm,.crt .cr-head,.crt .cr-spin{transform-box:view-box}
+.crt .cr-tail{animation:tailw 1.5s ease-in-out infinite alternate}
+@keyframes tailw{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+.crt .cr-wing{animation:flap 1.2s ease-in-out infinite alternate}
+@keyframes flap{from{transform:rotate(-5deg)}to{transform:rotate(16deg)}}
+.crt .cr-ear{animation:twitch 4.5s ease-in-out infinite}
+@keyframes twitch{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-10deg)}95%{transform:rotate(6deg)}}
+.crt .cr-arm{animation:armw 3s ease-in-out infinite}
+@keyframes armw{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg)}}
+.crt .cr-head{animation:headt 5s ease-in-out infinite}
+@keyframes headt{0%,100%{transform:rotate(0)}30%{transform:rotate(-3deg)}65%{transform:rotate(3deg)}}
+.crt .cr-spin{animation:orbit 12s linear infinite}
+.crt .cr-float{animation:floatb 3s ease-in-out infinite}
+@keyframes floatb{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.crt .cr-shadow{animation:shad 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes shad{50%{transform:scale(.85);opacity:.1}}
+.crt .cr-all{transform-box:view-box;transform-origin:100px 182px}
+.crt.atk .cr-all{animation:atkpose .6s cubic-bezier(.3,.7,.3,1.3)}
+@keyframes atkpose{0%{transform:none}25%{transform:scale(1.08,.88) translateY(6px)}55%{transform:scale(.94,1.12) translateY(-10px) rotate(-6deg)}100%{transform:none}}
+.crt.hurt .cr-all{animation:hurtp .6s}
+@keyframes hurtp{0%{transform:none}20%{transform:rotate(10deg) translateX(8px) scale(.94)}50%{transform:rotate(-6deg)}100%{transform:none}}
+.crt.happy .cr-all{animation:joy .8s ease-in-out}
+@keyframes joy{0%,100%{transform:none}40%{transform:translateY(-12px) scale(1.04,.96)}}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 
 @media (prefers-reduced-motion:reduce){.cloud,.holo,.rays{animation:none}}
@@ -300,6 +329,7 @@ button{font-family:inherit;color:inherit}
 <div id="pressring" class="press-ring"></div>
 <div id="cap" role="status" aria-live="polite"></div>
 
+<script src="creatures.js"></script>
 <script>'use strict';
 /* ====================== Outils ====================== */
 const $ = (s, r = document) => r.querySelector(s);
@@ -628,6 +658,7 @@ const mir = s => s + `<g transform="translate(200 0) scale(-1 1)">${s}</g>`;
 const starPts = (cx, cy, r1, r2, n = 5) => { let p = []; for (let i = 0; i < n * 2; i++) { const r = i % 2 ? r2 : r1, a = -Math.PI / 2 + i * Math.PI / n; p.push((cx + Math.cos(a) * r).toFixed(1) + ',' + (cy + Math.sin(a) * r).toFixed(1)); } return p.join(' '); };
 
 function creatureSVG(sp, o = {}) {
+  if (sp.art && window.drawCreature) return drawCreature(sp, o);
   const id = uid(), sh = SHAPES[sp.shape] || SHAPES.round, ey = sh.ey, top = sh.top;
   const B = `url(#${id}b)`, F = `url(#${id}f)`, W = `url(#${id}w)`, A = `url(#${id}a)`, Y = `url(#${id}y)`;
   const c1 = sp.c1, c2 = sp.c2, acc = sp.acc || c2, belly = sp.belly || '#fff';
@@ -792,7 +823,7 @@ const COMPANIONS = [
     { name: 'Foudrion', sp: { ...ELEC, shape: 'egg', ears: 'horn', head: 'crown', tail: 'zig', wings: 'bolt', pattern: 'stars', aura: true, sparkles: true, auraColor: '#ffe14d' } },
   ] },
 ];
-COMPANIONS.forEach(c => c.forms.forEach((f, i) => { f.sp.tier = i + 1; f.sp.elx = c.el; }));
+COMPANIONS.forEach(c => c.forms.forEach((f, i) => { f.sp.tier = i + 1; f.sp.elx = c.el; f.sp.art = (window.CREATURE_ART || {})[f.name]; }));
 const compById = id => COMPANIONS.find(c => c.id === id);
 const myForm = () => { const c = compById(S.companion) || COMPANIONS[0]; return c.forms[S.stage - 1]; };
 
@@ -831,7 +862,7 @@ const FAMILY = [
   ['Nébulon', 'etoile', 'o', { ...C('#b8a8ff', '#7a68e0', '#3a2a98', '#e8e2ff', '#ffd34d', '#ffd34d'), shape: 'pear', head: 'crown', wings: 'feather', pattern: 'stars', aura: true, sparkles: true, auraColor: '#9a8aff' }],
   ['Cristalor', 'glace', 'o', { ...C('#f4feff', '#c4ecff', '#5aa8e0', '#ffffff', '#ffffff', '#3a88d0'), shape: 'egg', head: 'crystal', ears: 'crystal', wings: 'fairy', tail: 'fluffy', aura: true, sparkles: true, auraColor: '#bff0ff' }],
 ];
-FAMILY.forEach(f => { f[3].tier = { c: 1, r: 2, o: 3 }[f[2]]; f[3].elx = f[1]; });
+FAMILY.forEach(f => { f[3].tier = { c: 1, r: 2, o: 3 }[f[2]]; f[3].elx = f[1]; f[3].art = (window.CREATURE_ART || {})[f[0]]; });
 const CARDS = [];
 COMPANIONS.forEach(c => c.forms.forEach((f, i) => CARDS.push({ id: c.id + (i + 1), name: f.name, el: c.el, rar: ['c', 'r', 'o'][i], sp: f.sp })));
 FAMILY.forEach(([name, el, rar, sp], i) => CARDS.push({ id: 'f' + i, name, el, rar, sp }));
@@ -1537,7 +1568,7 @@ const Battle = {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     // 1. élan
     me.animate([{ transform: 'none' }, { transform: 'translateX(-10%) scale(.92,1.06)' }, { transform: 'translateX(28%) scale(1.12)' }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.3,.7,.3,1.2)' });
-    Snd.attack(el);
+    Snd.attack(el); const msv = $('svg.crt', me); if (msv) { msv.classList.remove('atk'); void msv.offsetWidth; msv.classList.add('atk'); setTimeout(() => msv.classList.remove('atk'), 650); }
     await sleep(220);
     // 2. projectiles (trois, en éventail)
     const [x0, y0] = this.center(me, R), [x1, y1] = this.center(foe, R);
@@ -1553,7 +1584,7 @@ const Battle = {
     }
     await sleep(380 + (shots - 1) * 90);
     // 3. impact
-    foe.classList.remove('hit'); void foe.offsetWidth; foe.classList.add('hit');
+    foe.classList.remove('hit'); void foe.offsetWidth; foe.classList.add('hit'); const fsv = $('svg.crt', foe); if (fsv) { fsv.classList.add('hurt'); setTimeout(() => fsv.classList.remove('hurt'), 700); }
     Snd.hit(crit);
     if (crit) { ar.classList.remove('shake'); void ar.offsetWidth; ar.classList.add('shake'); }
     const bm = document.createElement('div'); bm.className = 'boom'; bm.style.left = x1 + 'px'; bm.style.top = y1 + 'px';
@@ -1636,8 +1667,8 @@ async function evolveRun(ns) {
   box.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg) scale(1.02)' }, { transform: 'rotate(3deg) scale(1.04)' }, { transform: 'rotate(0)' }], { duration: 260, iterations: 14 });
   let d = 520; const t0 = performance.now();
   while (performance.now() - t0 < 3500) {
-    eo.style.opacity = '1'; en.style.opacity = '0'; eo.style.transform = 'scale(1)'; await sleep(d);
-    eo.style.opacity = '0'; en.style.opacity = '1'; en.style.transform = 'scale(1.08)'; await sleep(d * .8);
+    eo.style.opacity = '1'; en.style.opacity = '0'; eo.style.transform = 'scale(1.06,.92)'; await sleep(d);
+    eo.style.opacity = '0'; en.style.opacity = '1'; en.style.transform = 'scale(.94,1.1)'; await sleep(d * .8);
     d = Math.max(70, d * .72);
   }
   clearInterval(orbs);
