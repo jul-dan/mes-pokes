@@ -2,8 +2,9 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Mes p'tits compagnons</title>
+<meta name="description" content="Jeu éducatif de maternelle : chiffres, lettres, formes… et des compagnons qui évoluent !">
 <meta name="theme-color" content="#8b6cf0"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap">
 <style>/* Monde : un ciel de jardin du matin, gros boutons ronds comme des galets de couleur.
    Thème unique et lumineux, choisi exprès (jeu pour enfant) : toutes les couleurs sont explicites. */
@@ -117,7 +118,7 @@ button{font-family:inherit;color:inherit}
 .mascot>svg{width:100%;height:100%;overflow:visible}
 
 /* tracé */
-.trace-wrap{position:relative;width:min(92vw,62vh,440px);aspect-ratio:1;border-radius:32px;background:#fff;box-shadow:0 8px 24px rgba(45,35,80,.14);touch-action:none}
+.trace-wrap{position:relative;width:min(92vw,calc(100dvh - 330px),440px);min-width:220px;aspect-ratio:1;border-radius:32px;background:#fff;box-shadow:0 8px 24px rgba(45,35,80,.14);touch-action:none}
 .trace-wrap canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:32px;touch-action:none}
 .phase{display:flex;gap:10px}
 .phase i{width:44px;height:12px;border-radius:6px;background:rgba(45,35,80,.15)}
@@ -204,6 +205,77 @@ button{font-family:inherit;color:inherit}
 .press-ring{position:fixed;width:80px;height:80px;border-radius:50%;border:5px solid rgba(139,108,240,.6);pointer-events:none;z-index:70;transform:scale(.4);opacity:0;transition:transform 1.8s linear,opacity .2s}
 
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:45}
+/* ====== Revamp : écrans, créatures, combat, sous-titres ====== */
+.screen.enter{animation:scrIn .42s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes scrIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.big{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s,filter .2s}
+@media (hover:hover){.big:hover{filter:brightness(1.05);transform:translateY(-2px)}}
+.play{position:relative;overflow:hidden;animation:breathe 2.4s ease-in-out infinite}
+.play::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 45%,transparent 60%);background-size:250% 100%;animation:sheen 3s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes sheen{0%,40%{background-position:130% 0}100%{background-position:-130% 0}}
+.lbl{display:block;font-size:14px;font-weight:700;color:var(--ink-soft);margin-top:4px;text-align:center}
+.btn-col{display:flex;flex-direction:column;align-items:center}
+.pet{filter:drop-shadow(0 10px 14px rgba(45,35,80,.18))}
+.pet.s3{filter:drop-shadow(0 0 22px rgba(255,220,120,.6)) drop-shadow(0 10px 14px rgba(45,35,80,.2))}
+.pet-name{position:relative;z-index:2;font-size:22px;font-weight:700;background:rgba(255,255,255,.75);padding:4px 16px;border-radius:20px;box-shadow:0 3px 0 rgba(45,35,80,.12);display:flex;gap:8px;align-items:center}
+.pet-name .stg{font-size:13px;background:var(--violet);color:#fff;border-radius:10px;padding:2px 8px}
+.xpbar .st{transition:transform .3s}.xpbar .st.on{animation:starOn .6s backwards}
+@keyframes starOn{from{transform:scale(0) rotate(-90deg)}}
+/* effets des créatures (niveaux 2 et 3) */
+.crt .fx-orbit{animation:orbit 5s linear infinite;transform-box:view-box;transform-origin:100px 118px}
+.crt .fx-orbit.rev{animation-direction:reverse;animation-duration:7s}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.crt .fx-spin{animation:orbit 14s linear infinite;transform-box:view-box;transform-origin:100px 118px}
+.crt .fx-spin.rev{animation-direction:reverse;animation-duration:20s}
+.crt .fx-pulse{animation:fxpulse 2.4s ease-in-out infinite;transform-box:view-box;transform-origin:100px 118px}
+@keyframes fxpulse{0%,100%{transform:scale(.94);opacity:.75}50%{transform:scale(1.06);opacity:1}}
+.crt .fx-rise{animation:fxrise 2.6s ease-in infinite;transform-box:fill-box;transform-origin:center}
+@keyframes fxrise{0%{transform:translateY(10px) scale(.4);opacity:0}25%{opacity:1}100%{transform:translateY(-70px) scale(1);opacity:0}}
+.crt .fx-breath{animation:breath 3.2s ease-in-out infinite;transform-box:view-box;transform-origin:100px 180px}
+@keyframes breath{0%,100%{transform:scale(1,1)}50%{transform:scale(1.025,.975)}}
+/* combat */
+.arena{position:relative;z-index:3;width:100%;max-width:460px;height:clamp(78px,15vh,120px);display:flex;justify-content:space-between;align-items:flex-end;margin-top:clamp(6px,2.5vh,22px);
+  background:radial-gradient(ellipse 30% 22% at 18% 88%,rgba(45,35,80,.12),transparent 70%),radial-gradient(ellipse 30% 22% at 82% 88%,rgba(45,35,80,.12),transparent 70%)}
+.fighter{position:relative;height:100%;aspect-ratio:1}
+.fighter>svg{width:100%;height:100%;overflow:visible}
+.fighter.foe>svg{transform:scaleX(-1)}
+.hp{position:absolute;left:8%;right:8%;top:-4px;height:10px;border-radius:6px;background:rgba(45,35,80,.18);overflow:hidden;box-shadow:0 0 0 2px #fff;z-index:2}
+.hp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#3cc47c,#8be06a);border-radius:6px;transition:width .6s cubic-bezier(.3,1.3,.5,1),background .3s}
+.hp.mid i{background:linear-gradient(90deg,#ffb020,#ffd84a)}.hp.low i{background:linear-gradient(90deg,#ff5a4a,#ff9a6a)}
+.foe-name{position:absolute;top:-24px;left:0;right:0;text-align:center;font-size:13px;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.fighter.hit{animation:hit .5s}
+@keyframes hit{0%{transform:translateX(0);filter:brightness(4)}15%{transform:translateX(10px) rotate(6deg)}30%{transform:translateX(-8px) rotate(-5deg);filter:brightness(1)}45%{transform:translateX(6px)}60%{transform:translateX(-4px)}100%{transform:none}}
+.fighter.taunt{animation:taunt .7s}
+@keyframes taunt{0%,100%{transform:none}30%{transform:translateY(-18%) rotate(-8deg)}60%{transform:translateY(0) rotate(6deg)}80%{transform:translateY(-6%)}}
+.fighter.friend{animation:friend 1.2s forwards}
+@keyframes friend{0%{transform:none}40%{transform:translateY(-20%) rotate(360deg) scale(1.15)}100%{transform:scale(1)}}
+.arena.shake,.screen.shake{animation:scrShake .4s}
+@keyframes scrShake{0%,100%{transform:none}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,2px)}80%{transform:translate(3px,-1px)}}
+.proj{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;pointer-events:none;z-index:5}
+.proj>svg{width:100%;height:100%;overflow:visible}
+.dmg{position:absolute;z-index:6;font-weight:700;font-size:28px;color:#fff;pointer-events:none;-webkit-text-stroke:2px #2d2350;paint-order:stroke;text-shadow:0 3px 0 #2d2350}
+.dmg.crit{font-size:38px;color:#ffd84a}
+.boom{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;pointer-events:none;z-index:4}
+.heart{position:absolute;pointer-events:none;z-index:6;width:26px;height:26px}
+/* sous-titres */
+#cap{position:fixed;left:50%;top:calc(82px + env(safe-area-inset-top,0px));transform:translateX(-50%) translateY(-8px);z-index:35;max-width:min(88vw,460px);
+  background:rgba(45,35,80,.8);color:#fff;font-size:14px;line-height:1.3;padding:7px 14px;border-radius:16px;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;text-align:center}
+#cap.on{opacity:1;transform:translateX(-50%)}
+/* évolution v2 */
+#evo .orb{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px;border-radius:50%;pointer-events:none}
+#evo .evo-name{position:relative;z-index:3;color:#fff;font-size:34px;font-weight:700;text-shadow:0 0 18px rgba(255,255,255,.8),0 3px 0 rgba(0,0,0,.3);margin-top:8px;opacity:0;transform:scale(.4)}
+#evo .evo-name.on{animation:namePop .7s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes namePop{to{opacity:1;transform:scale(1)}}
+#evo .shock{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px;border-radius:50%;border:8px solid #fff;pointer-events:none;opacity:0}
+#evo.quake{animation:scrShake .5s 2}
+#evo .evo-box>div{transition:transform .25s}
+.empty-msg{position:relative;z-index:2;text-align:center;font-size:16px;color:var(--ink-soft);background:rgba(255,255,255,.7);border-radius:16px;padding:8px 14px;margin:4px 0 8px}
+@media (min-width:600px){#app{box-shadow:0 0 0 1px rgba(255,255,255,.4),0 20px 60px rgba(45,35,80,.15)}}
+@media (max-height:640px){.stage{gap:20px}.play{height:90px}.square{height:84px}}
+@media (max-height:720px){.pet{max-height:31vh}.pet-name{font-size:18px}.home-actions{gap:10px}.home-stage{gap:4px}.lbl{font-size:12px;margin-top:2px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+
 @media (prefers-reduced-motion:reduce){.cloud,.holo,.rays{animation:none}}
 </style></head><body>
 <div id="app">
@@ -226,6 +298,7 @@ button{font-family:inherit;color:inherit}
 <div id="parent" class="parent" hidden></div>
 <div id="zoom" class="zoom" hidden></div>
 <div id="pressring" class="press-ring"></div>
+<div id="cap" role="status" aria-live="polite"></div>
 
 <script>'use strict';
 /* ====================== Outils ====================== */
@@ -255,7 +328,7 @@ const EXOS = [
 function defaultState() {
   return {
     v: 1, name: '', companion: null, xp: 0, stage: 1, cards: {}, packs: 0, sessions: 0,
-    settings: { exos: Object.fromEntries(EXOS.map(e => [e.id, true])), rate: 0.9, music: true, len: 6, voice: '', start: 1 },
+    settings: { exos: Object.fromEntries(EXOS.map(e => [e.id, true])), rate: 0.9, music: true, len: 6, voice: '', start: 1, subs: true },
     lv: {}, firstRun: true,
   };
 }
@@ -277,9 +350,9 @@ function idbOpen() {
 function idbPut(txt) { idbOpen().then(db => { const t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(txt, KEY); }).catch(() => { }); }
 function idbGet() { return idbOpen().then(db => new Promise(res => { const r = db.transaction('kv').objectStore('kv').get(KEY); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); })).catch(() => null); }
 function applySaved(raw) {
-  const d = JSON.parse(raw), base = defaultState();
+  const d = JSON.parse(raw), base = defaultState(), defSettings = base.settings;
   S = Object.assign(base, d);
-  S.settings = Object.assign(base.settings, d.settings || {});
+  S.settings = Object.assign(defSettings, d.settings || {});
   S.settings.exos = Object.assign(Object.fromEntries(EXOS.map(e => [e.id, true])), (d.settings || {}).exos || {});
 }
 /* ---- Code de sauvegarde (transfert vers un autre téléphone) ----
@@ -362,24 +435,74 @@ const Snd = {
     o.connect(g); o2.connect(g); g.connect(this.master); o.start(t); o2.start(t); o.stop(t + dur + .1); o2.stop(t + dur + .1);
   },
   fanfare() { this.seq([523, 523, 523, 659, 0, 587, 659, 784, 0, 1047], .13, 'triangle', .2, .5); this.seq([262, 0, 0, 330, 0, 294, 330, 392, 0, 523], .13, 'sine', .12, .6); },
-  /* petite musique douce, façon boîte à musique */
-  melody: [523, 0, 659, 784, 659, 0, 587, 523, 440, 0, 523, 587, 659, 0, 0, 0, 784, 0, 880, 784, 659, 0, 587, 659, 523, 0, 440, 392, 523, 0, 0, 0],
-  bass: [262, 196, 220, 175, 262, 196, 175, 196],
+  /* Musique d'aventure chiptune, composée ici et jouée en direct (aucun fichier) :
+     grille do – la m – fa – sol, 124 bpm, sections A A B B. */
+  noiseBuf() {
+    if (this._nb) return this._nb; const c = this.ctx, b = c.createBuffer(1, c.sampleRate * .5, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return (this._nb = b);
+  },
+  noise(t, dur, vol, freq = 6000, type = 'highpass', dest) {
+    if (!this.ctx) return; const c = this.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = this.noiseBuf(); f.type = type; f.frequency.value = freq; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+    s.connect(f); f.connect(g); g.connect(dest || this.master); s.start(t, Math.random() * .3); s.stop(t + dur + .02);
+  },
+  kick(t, dest) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + .12);
+    g.gain.setValueAtTime(.16, t); g.gain.exponentialRampToValueAtTime(.001, t + .18); o.connect(g); g.connect(dest); o.start(t); o.stop(t + .2);
+  },
+  mf: m => 440 * Math.pow(2, (m - 69) / 12),
+  song: {
+    lead: {
+      A: [72, 0, 76, 0, 79, 0, 76, 0, 77, 76, 74, 0, 72, 0, 0, 0, 69, 0, 72, 0, 76, 0, 72, 0, 74, 72, 71, 0, 69, 0, 0, 0,
+        69, 0, 72, 0, 77, 0, 76, 0, 74, 0, 72, 0, 74, 0, 76, 0, 79, 0, 0, 77, 76, 0, 74, 0, 71, 0, 74, 0, 79, 0, 0, 0],
+      B: [84, 0, 79, 0, 76, 79, 84, 0, 83, 0, 79, 0, 76, 0, 74, 0, 81, 0, 76, 0, 72, 76, 81, 0, 79, 0, 76, 0, 72, 0, 0, 0,
+        77, 0, 81, 0, 84, 0, 81, 0, 79, 0, 77, 0, 76, 0, 74, 0, 74, 0, 76, 0, 77, 0, 79, 0, 83, 0, 0, 0, 86, 0, 0, 0],
+    },
+    chords: [[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]],
+    order: ['A', 'A', 'B', 'B'],
+  },
   startMusic() {
     if (!this.ctx || this.playing) return; this.playing = true;
-    const g = this.musicGain; g.gain.cancelScheduledValues(this.ctx.currentTime); g.gain.linearRampToValueAtTime(1, this.ctx.currentTime + 1.5);
-    let i = 0; const step = .34; let next = this.ctx.currentTime + .1;
+    const c = this.ctx, g = this.musicGain; g.gain.cancelScheduledValues(c.currentTime); g.gain.setValueAtTime(g.gain.value, c.currentTime); g.gain.linearRampToValueAtTime(1, c.currentTime + 1.5);
+    if (!this.mbus) { this.mbus = c.createBiquadFilter(); this.mbus.type = 'lowpass'; this.mbus.frequency.value = 3200; this.mbus.connect(g); }
+    const bus = this.mbus, step = 60 / 124 / 4, song = this.song; let i = 0, next = c.currentTime + .1;
     const loop = () => {
       if (!this.playing) return;
-      while (next < this.ctx.currentTime + .8) {
-        const m = this.melody[i % this.melody.length]; if (m) this.tone(m, next, 1.1, 'sine', .035, g);
-        if (i % 4 === 0) this.tone(this.bass[(i / 4) % this.bass.length] / 2, next, 1.6, 'triangle', .03, g);
+      while (next < c.currentTime + .5) {
+        const sec = song.order[Math.floor(i / 64) % song.order.length], k = i % 64, bar = Math.floor(k / 16), b16 = k % 16, ch = song.chords[bar];
+        const m = song.lead[sec][k]; if (m) this.tone(this.mf(m), next, step * 2.2, 'square', .022, bus);
+        if (m && sec === 'B') this.tone(this.mf(m - 12), next, step * 2, 'triangle', .02, bus);
+        this.tone(this.mf(ch[b16 % 3] + 12), next, step * .9, 'square', .007, bus);                         // arpège
+        if (b16 % 2 === 0) this.tone(this.mf(ch[0] - (b16 % 4 ? 12 : 24)), next, step * 1.8, 'triangle', .07, bus); // basse qui rebondit
+        if (b16 % 8 === 0 || (sec === 'B' && b16 === 10)) this.kick(next, g);
+        if (b16 % 8 === 4) this.noise(next, .12, .05, 1800, 'bandpass', g);                                    // caisse claire
+        if (b16 % 2 === 1 || sec === 'B') this.noise(next, .03, .018, 7000, 'highpass', g);                      // charleston
         i++; next += step;
       }
-      this.timer = setTimeout(loop, 200);
+      this.timer = setTimeout(loop, 120);
     };
     loop();
   },
+  /* ---- bruitages de combat ---- */
+  attack(el) {
+    if (!this.ctx) return; const t = this.ctx.currentTime + .01, c = this.ctx;
+    if (el === 'feu') { this.noise(t, .45, .25, 900, 'lowpass'); this.seq([220, 330, 440], .05, 'sawtooth', .05, .2); }
+    else if (el === 'eau') { [600, 800, 1000, 1300].forEach((f, i) => { const o = c.createOscillator(), g = c.createGain(), tt = t + i * .06; o.frequency.setValueAtTime(f, tt); o.frequency.exponentialRampToValueAtTime(f * 2, tt + .08); g.gain.setValueAtTime(.12, tt); g.gain.exponentialRampToValueAtTime(.001, tt + .1); o.connect(g); g.connect(this.master); o.start(tt); o.stop(tt + .12); }); }
+    else if (el === 'plante') { this.whoosh(); this.seq([1047, 1319, 1568], .05, 'sine', .08, .2); }
+    else { for (let i = 0; i < 6; i++) this.tone(300 + Math.random() * 1500, t + i * .035, .05, 'square', .06); this.noise(t, .3, .12, 3000, 'bandpass'); }
+  },
+  hit(crit) {
+    if (!this.ctx) return; const t = this.ctx.currentTime + .01;
+    this.kick(t, this.master); this.noise(t, .18, .25, 1200, 'lowpass');
+    if (crit) this.seq([1568, 2093, 2637], .06, 'triangle', .1, .3);
+  },
+  boing() {
+    if (!this.ctx) return; const c = this.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
+    o.type = 'triangle'; o.frequency.setValueAtTime(300, t); o.frequency.exponentialRampToValueAtTime(700, t + .12); o.frequency.exponentialRampToValueAtTime(250, t + .3);
+    g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + .35); o.connect(g); g.connect(this.master); o.start(t); o.stop(t + .4);
+  },
+  friend() { this.seq([784, 988, 1175, 1568], .09, 'triangle', .14, .4); this.seq([1568, 0, 1976, 0, 2349], .09, 'sine', .05, .5); },
+  boom() { if (!this.ctx) return; const t = this.ctx.currentTime; this.kick(t, this.master); this.noise(t, .9, .4, 700, 'lowpass'); },
   stopMusic() { this.playing = false; clearTimeout(this.timer); if (this.ctx) this.musicGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + .3); },
   duck(on) { if (!this.ctx || !this.playing) return; const g = this.musicGain.gain, t = this.ctx.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(on ? .35 : 1, t + .25); },
   sync() { if (S.settings.music) this.startMusic(); else this.stopMusic(); },
@@ -412,22 +535,29 @@ const Voice = {
   say(text, opts = {}) {
     const tk = ++this.token;
     return new Promise(res => {
-      if (!('speechSynthesis' in window) || !text) { setTimeout(res, 300); return; }
+      if (!('speechSynthesis' in window) || !text) { if (text) { Caption.show(text); setTimeout(() => { if (tk === this.token) Caption.hide(); res(true); }, 900 + text.length * 45); } else setTimeout(res, 300); return; }
       try { speechSynthesis.cancel(); } catch (e) { }
+      Caption.show(text);
       const u = new SpeechSynthesisUtterance(text);
       if (!this.v) this.refresh();
       try { if (this.v) u.voice = this.v; } catch (e) { } u.lang = 'fr-FR';
       u.rate = (opts.rate || 1) * S.settings.rate; u.pitch = opts.pitch || 1.05; u.volume = 1;
-      let done = false; const fin = () => { if (done) return; done = true; Snd.duck(false); res(tk === this.token); };
+      let done = false; const fin = () => { if (done) return; done = true; Snd.duck(false); if (tk === this.token) Caption.hide(); res(tk === this.token); };
       u.onend = fin; u.onerror = fin;
       setTimeout(fin, 1600 + text.length * 95 / u.rate);
       Snd.duck(true);
       setTimeout(() => { try { speechSynthesis.speak(u); } catch (e) { fin(); } }, 40);
     });
   },
-  stop() { this.token++; try { speechSynthesis.cancel(); } catch (e) { } Snd.duck(false); },
+  stop() { this.token++; try { speechSynthesis.cancel(); } catch (e) { } Snd.duck(false); Caption.hide(); },
 };
 const say = (t, o) => Voice.say(t, o);
+/* Sous-titres : ce que dit la voix s'affiche aussi (utile sans son ou sans voix française) */
+const Caption = {
+  t: 0,
+  show(text) { const c = $('#cap'); if (!c || S.settings.subs === false) return; clearTimeout(this.t); c.textContent = text; c.classList.add('on'); },
+  hide() { const c = $('#cap'); if (!c) return; clearTimeout(this.t); this.t = setTimeout(() => c.classList.remove('on'), 700); },
+};
 
 /* Noms des lettres, écrits pour que la voix les prononce bien isolés */
 const LETTER_SAY = { A: 'a', B: 'bé', C: 'cé', D: 'dé', E: 'euh', F: 'èffe', G: 'jé', H: 'ache', I: 'i', J: 'ji', K: 'ka', L: 'èle', M: 'ème', N: 'ène', O: 'o', P: 'pé', Q: 'ku', R: 'ère', S: 'èsse', T: 'té', U: 'u', V: 'vé', W: 'double vé', X: 'ix', Y: 'i grec', Z: 'zèd' };
@@ -439,9 +569,9 @@ const TRYAGAIN = ['Presque ! Essaie encore.', 'Oh, pas tout à fait. Essaie enco
 const Confetti = {
   cv: null, cx: null, parts: [], raf: 0,
   init() { this.cv = $('#confetti'); this.cx = this.cv.getContext('2d'); const r = () => { this.cv.width = innerWidth * devicePixelRatio; this.cv.height = innerHeight * devicePixelRatio; }; r(); addEventListener('resize', r); },
-  burst(x, y, n = 60, power = 1) {
+  burst(x, y, n = 60, power = 1, colors) {
     if (x == null) { x = innerWidth / 2; y = innerHeight / 3; }
-    const cols = ['#ff7a6b', '#ffc93c', '#7ed37a', '#5fb8ff', '#b28cff', '#ff9de2'];
+    const cols = colors || ['#ff7a6b', '#ffc93c', '#7ed37a', '#5fb8ff', '#b28cff', '#ff9de2'];
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, s = (3 + Math.random() * 7) * power;
       this.parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 5 * power, r: 4 + Math.random() * 5, c: pick(cols), rot: Math.random() * 6, vr: (Math.random() - .5) * .4, life: 90 + rnd(50), sh: rnd(3) });
@@ -557,8 +687,11 @@ function creatureSVG(sp, o = {}) {
   front.push(mir(`<ellipse cx="76" cy="173" rx="15" ry="8" fill="${c2}"/>`));
   if (sp.shape !== 'cloud') front.push(mir(`<ellipse cx="50" cy="${ey + 26}" rx="9" ry="14" transform="rotate(28 50 ${ey + 26})" fill="${B}" stroke="${c2}" stroke-width="2"/>`));
   // ---- visage ----
-  const eye = x => `<g class="eye"><ellipse cx="${x}" cy="${ey}" rx="12.5" ry="15" fill="#241b3a"/><ellipse cx="${x}" cy="${ey + 6}" rx="8.5" ry="7" fill="${sp.eye || c2}" opacity=".9"/><circle cx="${x - 4}" cy="${ey - 6}" r="5" fill="#fff"/><circle cx="${x + 4.5}" cy="${ey + 6}" r="2.2" fill="#fff"/></g>`;
+  const tier = sp.tier || 1;
+  const eye = x => `<g class="eye"><ellipse cx="${x}" cy="${ey}" rx="12.5" ry="15" fill="#241b3a"/><ellipse cx="${x}" cy="${ey + 5}" rx="9" ry="8.5" fill="url(#${id}e)"/><circle cx="${x - 4}" cy="${ey - 6}" r="5" fill="#fff"/><circle cx="${x + 4.5}" cy="${ey + 6}" r="2.2" fill="#fff"/>${tier >= 3 ? `<polygon points="${starPts(x + 5, ey - 3, 3.2, 1.2, 4)}" fill="#fff"/>` : ''}</g>`;
   front.push(eye(79) + eye(121));
+  if (tier >= 2) front.push(mir(`<path d="M${tier >= 3 ? 64 : 68} ${ey - (tier >= 3 ? 22 : 21)} Q76 ${ey - 27} ${tier >= 3 ? 90 : 88} ${ey - (tier >= 3 ? 18 : 22)}" stroke="#241b3a" stroke-width="3.6" fill="none" stroke-linecap="round" opacity=".85"/>`));
+  if (tier >= 3) front.push(`<g filter="url(#${id}gl)"><polygon points="100,138 107,146 100,154 93,146" fill="${sp.auraColor || acc}" stroke="#fff" stroke-width="2.5"/></g><polygon points="100,140 103,145 100,147 97,143" fill="#fff" opacity=".8"/>`);
   front.push(`<ellipse cx="62" cy="${ey + 16}" rx="10" ry="6" fill="${sp.cheek || '#ff7aa8'}" opacity=".45"/><ellipse cx="138" cy="${ey + 16}" rx="10" ry="6" fill="${sp.cheek || '#ff7aa8'}" opacity=".45"/>`);
   front.push(`<path class="mo-calm" d="M92 ${ey + 17} Q100 ${ey + 25} 108 ${ey + 17}" stroke="#241b3a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
     <g class="mo-happy"><path d="M89 ${ey + 15} Q100 ${ey + 36} 111 ${ey + 15}Z" fill="#7a2244" stroke="#241b3a" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="100" cy="${ey + 26}" rx="6" ry="4" fill="#ff8fb0"/></g>`);
@@ -586,7 +719,29 @@ function creatureSVG(sp, o = {}) {
   if (sp.sparkles) front.push([[30, 60, 0], [170, 70, .6], [160, 170, 1.1], [36, 160, .3], [100, 22, .9]].map(([x, y, d]) => `<polygon class="twinkle" style="animation-delay:${d}s" points="${starPts(x, y, 7, 2.5, 4)}" fill="#fff8c4"/>`).join(''));
   if (sp.bubbles) front.push([[40, 150, 0], [160, 140, 1], [150, 90, 2], [52, 96, 1.5]].map(([x, y, d]) => `<circle class="floaty" style="animation-delay:${d}s" cx="${x}" cy="${y}" r="6" fill="#fff" fill-opacity=".35" stroke="#fff" stroke-width="1.5"/>`).join(''));
   const s = sp.scale || 1;
+  const fxc = sp.auraColor || acc, st = !!o.still, an = c => st ? '' : ` class="${c}"`;
+  const pShape = (k, col) => ({
+    feu: `<path d="${P.flame}" transform="scale(.22)" fill="${col}"/>`,
+    eau: `<circle r="5" fill="#fff" fill-opacity=".35" stroke="#fff" stroke-width="1.5"/>`,
+    plante: `<path d="${P.leaf}" transform="scale(.26)" fill="#9be88a" stroke="#2f8a45" stroke-width="3"/>`,
+    eclair: `<polygon points="${P.bolt}" transform="scale(.32)" fill="#fff48a" stroke="#d9a400" stroke-width="3"/>`,
+  }[k] || `<polygon points="${starPts(0, 0, 6, 2.2, 4)}" fill="#fff8c4"/>`);
+  const fxBack = [], fxFront = [];
+  if (tier >= 2) {
+    fxBack.push(`<circle cx="100" cy="118" r="${tier >= 3 ? 98 : 78}" fill="url(#${id}g)"${an('fx-pulse')} opacity=".85"/>`);
+    const n = tier >= 3 ? 4 : 2;
+    for (let i = 0; i < n; i++) fxFront.push(`<g${an('fx-orbit' + (i % 2 ? ' rev' : ''))} style="animation-delay:-${(i * 5 / n).toFixed(2)}s"><g transform="rotate(${i * 360 / n} 100 118)"><circle cx="100" cy="${tier >= 3 ? 26 : 40}" r="${tier >= 3 ? 5 : 4}" fill="#fff" filter="url(#${id}gl)"/><circle cx="100" cy="${tier >= 3 ? 26 : 40}" r="${tier >= 3 ? 9 : 7}" fill="${fxc}" opacity=".45"/></g></g>`);
+  }
+  if (tier >= 3) {
+    fxBack.unshift(`<g${an('fx-spin rev')} opacity=".32">${Array.from({ length: 10 }, (_, i) => `<polygon points="100,118 92,0 108,0" fill="${fxc}" transform="rotate(${i * 36} 100 118)"/>`).join('')}</g>`);
+    fxBack.push(`<g${an('fx-spin')}><circle cx="100" cy="118" r="90" fill="none" stroke="${fxc}" stroke-width="3" stroke-dasharray="3 13" stroke-linecap="round" opacity=".9"/></g>`);
+    fxBack.push(`<g${an('fx-spin rev')}><circle cx="100" cy="118" r="80" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="20 30" opacity=".55"/></g>`);
+    if (!st) fxFront.push([[34, 150, 0], [166, 158, .7], [56, 172, 1.4], [146, 176, 2], [100, 186, 1.1], [20, 120, 1.8]].map(([x, y, d]) => `<g transform="translate(${x} ${y})"><g class="fx-rise" style="animation-delay:${d}s">${pShape(sp.elx, fxc)}</g></g>`).join(''));
+  }
   const defs = `<defs>
+    <radialGradient id="${id}e" cx="50%" cy="70%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="${sp.eye || c2}"/><stop offset="1" stop-color="#241b3a"/></radialGradient>
+    <filter id="${id}gl" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="${id}bg" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0" stdDeviation="${tier >= 3 ? 5 : 3}" flood-color="${fxc}" flood-opacity="${tier >= 3 ? .95 : .6}"/></filter>
     <radialGradient id="${id}b" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="${c1}"/><stop offset=".55" stop-color="${sp.mid || c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient>
     <radialGradient id="${id}f" cx="50%" cy="80%" r="80%"><stop offset="0" stop-color="#fff3a0"/><stop offset=".45" stop-color="#ffb340"/><stop offset="1" stop-color="#ff5a2a"/></radialGradient>
     <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8fbff"/><stop offset="1" stop-color="#4fb6ff"/></linearGradient>
@@ -595,7 +750,7 @@ function creatureSVG(sp, o = {}) {
   </defs>`;
   return `<svg class="crt${o.happy ? ' happy' : ''}" viewBox="${o.vb || '0 0 200 200'}" ${o.attrs || ''} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${defs}
     ${o.noShadow ? '' : '<ellipse cx="100" cy="182" rx="54" ry="8" fill="#2d2350" opacity=".13"/>'}
-    <g transform="translate(100 180) scale(${s}) translate(-100 -180)"><g class="${o.still ? '' : 'bob'}">${back.join('')}${body}${front.join('')}</g></g></svg>`;
+    ${o.noFx ? '' : fxBack.join('')}<g transform="translate(100 180) scale(${s}) translate(-100 -180)"><g class="${o.still ? '' : 'bob'}"><g${an('fx-breath')}${tier >= 2 && !o.noFx ? ` filter="url(#${id}bg)"` : ''}>${back.join('')}${body}${front.join('')}</g></g></g>${o.noFx ? '' : fxFront.join('')}</svg>`;
 }
 
 /* ---- Éléments ---- */
@@ -637,6 +792,7 @@ const COMPANIONS = [
     { name: 'Foudrion', sp: { ...ELEC, shape: 'egg', ears: 'horn', head: 'crown', tail: 'zig', wings: 'bolt', pattern: 'stars', aura: true, sparkles: true, auraColor: '#ffe14d' } },
   ] },
 ];
+COMPANIONS.forEach(c => c.forms.forEach((f, i) => { f.sp.tier = i + 1; f.sp.elx = c.el; }));
 const compById = id => COMPANIONS.find(c => c.id === id);
 const myForm = () => { const c = compById(S.companion) || COMPANIONS[0]; return c.forms[S.stage - 1]; };
 
@@ -675,6 +831,7 @@ const FAMILY = [
   ['Nébulon', 'etoile', 'o', { ...C('#b8a8ff', '#7a68e0', '#3a2a98', '#e8e2ff', '#ffd34d', '#ffd34d'), shape: 'pear', head: 'crown', wings: 'feather', pattern: 'stars', aura: true, sparkles: true, auraColor: '#9a8aff' }],
   ['Cristalor', 'glace', 'o', { ...C('#f4feff', '#c4ecff', '#5aa8e0', '#ffffff', '#ffffff', '#3a88d0'), shape: 'egg', head: 'crystal', ears: 'crystal', wings: 'fairy', tail: 'fluffy', aura: true, sparkles: true, auraColor: '#bff0ff' }],
 ];
+FAMILY.forEach(f => { f[3].tier = { c: 1, r: 2, o: 3 }[f[2]]; f[3].elx = f[1]; });
 const CARDS = [];
 COMPANIONS.forEach(c => c.forms.forEach((f, i) => CARDS.push({ id: c.id + (i + 1), name: f.name, el: c.el, rar: ['c', 'r', 'o'][i], sp: f.sp })));
 FAMILY.forEach(([name, el, rar, sp], i) => CARDS.push({ id: 'f' + i, name, el, rar, sp }));
@@ -1126,13 +1283,13 @@ async function runTrace(q, stage, L) {
 
 /* ====================== Écrans ====================== */
 const XP_STAGE = [0, 100, 300];
-function show(id) { $$('#app .screen').forEach(s => s.hidden = s.id !== id); }
+function show(id) { $$('#app .screen').forEach(s => { const was = s.hidden; s.hidden = s.id !== id; if (!s.hidden && was) { s.classList.remove('enter'); void s.offsetWidth; s.classList.add('enter'); } }); }
 const stageFor = xp => xp >= XP_STAGE[2] ? 3 : xp >= XP_STAGE[1] ? 2 : 1;
 function petHTML(happy) { return creatureSVG(myForm().sp, { happy }); }
-function musicBtn() { return `<button class="big round" id="bMusic" aria-label="Musique">${S.settings.music ? IC.music : IC.musicOff}</button>`; }
+function musicBtn() { return `<button class="big round" id="bMusic" aria-label="Musique" aria-pressed="${!!S.settings.music}">${S.settings.music ? IC.music : IC.musicOff}</button>`; }
 function bindMusic(root) {
   const b = $('#bMusic', root); if (!b) return;
-  b.onclick = () => { Snd.init(); S.settings.music = !S.settings.music; save(); Snd.sync(); b.innerHTML = S.settings.music ? IC.music : IC.musicOff; };
+  b.onclick = () => { Snd.init(); S.settings.music = !S.settings.music; save(); Snd.sync(); b.innerHTML = S.settings.music ? IC.music : IC.musicOff; b.setAttribute('aria-pressed', !!S.settings.music); };
 }
 const PET_LINES = () => {
   const f = myForm(), n = S.name ? ' ' + S.name : '';
@@ -1143,8 +1300,9 @@ const PET_LINES = () => {
 function screenStart() {
   const s = $('#s-home'); show('s-home');
   s.innerHTML = `<div class="home-stage">
-    <button class="big" id="bStart" style="width:200px;height:200px;border-radius:50%;padding:20px" aria-label="Commencer">${IC.sun}</button>
+    <button class="big play" id="bStart" style="width:200px;height:200px;border-radius:50%;padding:20px;background:#fff" aria-label="Commencer">${IC.sun}</button>
     <div class="title">Mes p'tits compagnons</div>
+    <div class="lbl" style="position:relative;z-index:2;font-size:17px">Touche le soleil pour commencer</div>
     <p style="position:relative;z-index:2;max-width:300px;text-align:center;font-size:14px;color:var(--ink-soft);margin:8px 0 0">Parent : un appui long sur le soleil (en haut à gauche de l'accueil) ouvre les réglages : prénom, exercices, voix.</p>
   </div>`;
   $('#bStart').onclick = () => {
@@ -1189,14 +1347,15 @@ function screenHome(greet) {
   const filled = hi ? Math.floor((S.xp - lo) / (hi - lo) * 5) : 5;
   s.innerHTML = `<div class="topbar"><button class="logo" id="bLogo" aria-label="Soleil">${IC.sun}</button><div class="mid"></div>${musicBtn()}</div>
     <div class="home-stage">
-      <div class="pet s${st}" id="pet">${petHTML(false)}</div>
-      <div class="xpbar">${Array.from({ length: 5 }, (_, i) => `<span class="st">${IC.star(i < filled ? (st === 3 ? '#ffb020' : '#ffc93c') : '#ffffff')}</span>`).join('')}</div>
+      <div class="pet-name">${f.name}<span class="stg" aria-label="forme ${st} sur 3">${'★'.repeat(st)}</span></div>
+      <button class="pet s${st}" id="pet" aria-label="Caresser ${f.name}" style="background:none;border:0;padding:0">${petHTML(false)}</button>
+      <div class="xpbar" role="img" aria-label="${hi ? `${filled} étoiles sur 5 avant la prochaine évolution` : 'Forme finale atteinte !'}">${Array.from({ length: 5 }, (_, i) => `<span class="st${i < filled ? ' on' : ''}" style="animation-delay:${.3 + i * .12}s">${IC.star(i < filled ? (st === 3 ? '#ffb020' : '#ffc93c') : '#ffffff')}</span>`).join('')}</div>
     </div>
     <div class="home-actions">
-      <button class="big play" id="bPlay" aria-label="Jouer">${IC.play}</button>
+      <div class="btn-col"><button class="big play" id="bPlay" aria-label="Jouer">${IC.play}</button><span class="lbl" aria-hidden="true">Jouer</span></div>
       <div class="row">
-        <button class="big square" id="bCards" aria-label="Mes cartes">${IC.cards}</button>
-        ${S.packs > 0 ? `<button class="big square wiggle" id="bPack" aria-label="Ouvrir un paquet">${IC.pack}<span class="badge">${S.packs}</span></button>` : ''}
+        <div class="btn-col"><button class="big square" id="bCards" aria-label="Mes cartes">${IC.cards}</button><span class="lbl" aria-hidden="true">Mes cartes</span></div>
+        ${S.packs > 0 ? `<div class="btn-col"><button class="big square wiggle" id="bPack" aria-label="Ouvrir un paquet (${S.packs})">${IC.pack}<span class="badge">${S.packs}</span></button><span class="lbl" aria-hidden="true">Paquet</span></div>` : ''}
       </div>
     </div>`;
   bindMusic(s);
@@ -1266,7 +1425,7 @@ async function startSession() {
   s.innerHTML = `<div class="topbar"><button class="big round" id="bHome" aria-label="Accueil">${IC.home}</button>
       <div class="mid"><div class="dots">${plan.map(() => '<span class="dot"></span>').join('')}</div></div>
       <button class="big round" id="bSay" aria-label="Réécouter">${IC.speak}</button></div>
-    <div class="stage" id="stage"></div><div class="mascot" id="mascot">${petHTML(false)}</div>`;
+    ${Battle.html(plan, i0)}<div class="stage" id="stage"></div>`;
   $('#bHome').onclick = () => {
     if (Date.now() - quitArm < 3500) { quitSession(); return; }
     quitArm = Date.now(); $('#bHome').classList.add('wiggle'); setTimeout(() => $('#bHome') && $('#bHome').classList.remove('wiggle'), 3500);
@@ -1286,18 +1445,21 @@ async function startSession() {
     if (q.special === 'trace') { r = await runTrace(q, stage, lvl('trace').l); }
     else r = await runChoice(q, stage);
     if (gone()) return;
+    if (q.special === 'trace') await Battle.attack(r.first);
     record(type, r.first);
     const xp = r.first ? 10 : 5; gained += xp; S.xp += xp; S.run = { plan, i: i + 1 }; save();
     await sleep(350);
   }
   if (gone()) return;
   $$('.dot', s).forEach(d => d.className = 'dot done');
+  await Battle.befriend();
+  if (gone()) return;
   S.xp += 10; S.packs += 1; S.sessions += 1; S.run = null; save();
   Game.active = false;
   screenEnd();
 }
 function quitSession(silent) {
-  Game.quit = true; Game.active = false; Game.sid++; Voice.stop();
+  Battle.on = false; Game.quit = true; Game.active = false; Game.sid++; Voice.stop();
   if (window.__trace) { window.__trace.alive = false; window.__trace.cancel && window.__trace.cancel(); }
   if (Game.curResolve) Game.curResolve({ first: false });
   if (!silent) screenHome(false);
@@ -1322,13 +1484,13 @@ function runChoice(q, stage) {
       if (c.ok) {
         done = true; b.classList.remove('shine'); b.classList.add('right'); $$('.choice', stage).forEach(o => o !== b && o.classList.add('off'));
         Snd.good(); const r = b.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 2, 45);
-        mascotCheer(); if (q.onOk) q.onOk();
+        mascotCheer(); Battle.attack(tries === 0); if (q.onOk) q.onOk();
         await say((tries ? '' : pick(PRAISE) + ' ') + q.okSay);
         Game.curResolve = null; resolve({ first: tries === 0 });
         return;
       }
       if (b.classList.contains('off')) return;
-      tries++; Snd.soft(); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope');
+      tries++; Snd.soft(); Battle.taunt(); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope');
       if (tries === 1) {
         await say(pick(TRYAGAIN));
         if (done) return;
@@ -1341,6 +1503,83 @@ function runChoice(q, stage) {
     });
   });
 }
+
+
+/* ====================== Combat amical ======================
+   Pendant la séance, ton compagnon affronte une créature sauvage.
+   Chaque bonne réponse = une attaque. À la fin, la créature devient ton amie.
+   (Purement visuel : rien n'est ajouté à la sauvegarde.) */
+const ELFX = {
+  feu: { cols: ['#ffd25a', '#ff9a3d', '#f0623a', '#fff3a0'], proj: '<svg viewBox="-30 -60 60 70"><path d="M0 0 C-15 0 -19 -14 -11 -26 C-6 -33 -3 -39 0 -52 C5 -41 13 -34 15 -23 C19 -11 13 0 0 0Z" fill="#ff8a3d" stroke="#fff3a0" stroke-width="4"/><circle cy="-14" r="8" fill="#fff3a0"/></svg>', spin: 0 },
+  eau: { cols: ['#7fe0ff', '#4fb6ff', '#ffffff', '#2f86e0'], proj: '<svg viewBox="-24 -24 48 48"><circle r="18" fill="#6cc6ff" stroke="#fff" stroke-width="4"/><ellipse cx="-6" cy="-7" rx="5" ry="7" fill="#fff" opacity=".85"/></svg>', spin: 0 },
+  plante: { cols: ['#8fdc6e', '#c9f59a', '#ffb3d1', '#3aa357'], proj: '<svg viewBox="-24 -48 48 52"><path d="M0 0 C-14 -12 -14 -32 0 -46 C14 -32 14 -12 0 0Z" fill="#7fe08a" stroke="#2f8a45" stroke-width="3"/></svg>', spin: 720 },
+  eclair: { cols: ['#ffe14d', '#fff7a8', '#b49aff', '#ffffff'], proj: '<svg viewBox="-14 -40 28 44"><polygon points="-5,0 7,-17 0,-17 9,-36 -10,-12 -3,-12 -12,0" fill="#ffe14d" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg>', spin: 0 },
+};
+const HEART = '<svg viewBox="0 0 24 24"><path d="M12 21C5 16 2 12 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 4-3 8-10 13Z" fill="#ff6b9a" stroke="#fff" stroke-width="2"/></svg>';
+const Battle = {
+  on: false, hp: 100, per: 20, foe: null,
+  pickFoe() { const pool = CARDS.filter(c => c.id[0] === 'f' && c.rar !== 'o'); return pick(pool); },
+  html(plan, i0) {
+    this.foe = this.pickFoe(); this.per = 100 / plan.length; this.hp = Math.max(0, 100 - i0 * this.per); this.on = true;
+    return `<div class="arena" id="arena" aria-label="Combat amical contre ${this.foe.name}">
+      <div class="fighter me" id="mascot">${petHTML(false)}</div>
+      <div class="fighter foe" id="foe"><div class="foe-name">${this.foe.name}</div><div class="hp" id="hp" role="progressbar" aria-label="Énergie de ${this.foe.name}" aria-valuemin="0" aria-valuemax="100"><i id="hpFill"></i></div>${creatureSVG(this.foe.sp, {})}</div>
+    </div>`;
+  },
+  bar() {
+    const h = $('#hp'); if (!h) return; $('#hpFill').style.width = this.hp + '%';
+    h.classList.toggle('mid', this.hp <= 60 && this.hp > 30); h.classList.toggle('low', this.hp <= 30); h.setAttribute('aria-valuenow', Math.round(this.hp));
+  },
+  center(el, ar) { const r = el.getBoundingClientRect(); return [r.left - ar.left + r.width / 2, r.top - ar.top + r.height / 2]; },
+  async attack(crit) {
+    const ar = $('#arena'), me = $('#mascot'), foe = $('#foe'); if (!ar || !me || !foe || !this.on) return;
+    const el = (compById(S.companion) || COMPANIONS[0]).el, fx = ELFX[el] || ELFX.feu, R = ar.getBoundingClientRect();
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // 1. élan
+    me.animate([{ transform: 'none' }, { transform: 'translateX(-10%) scale(.92,1.06)' }, { transform: 'translateX(28%) scale(1.12)' }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.3,.7,.3,1.2)' });
+    Snd.attack(el);
+    await sleep(220);
+    // 2. projectiles (trois, en éventail)
+    const [x0, y0] = this.center(me, R), [x1, y1] = this.center(foe, R);
+    const shots = reduce ? 1 : 3;
+    for (let k = 0; k < shots; k++) {
+      const pj = document.createElement('div'); pj.className = 'proj'; pj.innerHTML = fx.proj; ar.appendChild(pj);
+      const lift = -30 - k * 18, ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI + (el === 'feu' ? 90 : 0);
+      pj.animate([
+        { transform: `translate(${x0}px,${y0}px) rotate(${ang}deg) scale(.4)`, opacity: 0 },
+        { transform: `translate(${(x0 + x1) / 2}px,${(y0 + y1) / 2 + lift}px) rotate(${ang + fx.spin / 2}deg) scale(1.1)`, opacity: 1, offset: .5 },
+        { transform: `translate(${x1}px,${y1}px) rotate(${ang + fx.spin}deg) scale(.9)`, opacity: 1 }], { duration: 380, delay: k * 90, easing: 'ease-in', fill: 'forwards' })
+        .finished.then(() => pj.remove()).catch(() => pj.remove());
+    }
+    await sleep(380 + (shots - 1) * 90);
+    // 3. impact
+    foe.classList.remove('hit'); void foe.offsetWidth; foe.classList.add('hit');
+    Snd.hit(crit);
+    if (crit) { ar.classList.remove('shake'); void ar.offsetWidth; ar.classList.add('shake'); }
+    const bm = document.createElement('div'); bm.className = 'boom'; bm.style.left = x1 + 'px'; bm.style.top = y1 + 'px';
+    bm.style.background = `radial-gradient(circle,#fff 0 30%,${fx.cols[0]} 45%,transparent 70%)`; ar.appendChild(bm);
+    bm.animate([{ transform: 'scale(.5)', opacity: 1 }, { transform: `scale(${crit ? 7 : 5})`, opacity: 0 }], { duration: 450, easing: 'ease-out' }).finished.then(() => bm.remove()).catch(() => bm.remove());
+    Confetti.burst(R.left + x1, R.top + y1, crit ? 40 : 22, crit ? .9 : .6, fx.cols);
+    const dmg = Math.round(this.per), dn = document.createElement('div');
+    dn.className = 'dmg' + (crit ? ' crit' : ''); dn.textContent = (crit ? '★ ' : '') + '-' + dmg; dn.style.left = (x1 - 24) + 'px'; dn.style.top = (y1 - 30) + 'px'; ar.appendChild(dn);
+    dn.animate([{ transform: 'translateY(0) scale(.4)', opacity: 0 }, { transform: 'translateY(-18px) scale(1.25)', opacity: 1, offset: .25 }, { transform: 'translateY(-46px) scale(1)', opacity: 0 }], { duration: 1100, easing: 'ease-out' }).finished.then(() => dn.remove()).catch(() => dn.remove());
+    this.hp = Math.max(0, this.hp - this.per); if (this.hp < 1) this.hp = 0; this.bar();
+  },
+  taunt() { const f = $('#foe'); if (!f || !this.on) return; f.classList.remove('taunt'); void f.offsetWidth; f.classList.add('taunt'); Snd.boing(); },
+  async befriend() {
+    const ar = $('#arena'), foe = $('#foe'); if (!ar || !foe || !this.on) return; this.on = false;
+    await sleep(500);
+    const hp = $('#hp'); if (hp) hp.style.visibility = 'hidden';
+    foe.classList.remove('hit'); foe.classList.add('friend'); const svg = $('svg.crt', foe); if (svg) svg.classList.add('happy'); Snd.friend();
+    const R = ar.getBoundingClientRect(), [x, y] = this.center(foe, R);
+    for (let i = 0; i < 7; i++) {
+      const h = document.createElement('div'); h.className = 'heart'; h.innerHTML = HEART; h.style.left = (x - 13) + 'px'; h.style.top = (y - 13) + 'px'; ar.appendChild(h);
+      const dx = (Math.random() - .5) * 120, dy = -50 - Math.random() * 60;
+      h.animate([{ transform: 'translate(0,0) scale(.3)', opacity: 0 }, { transform: `translate(${dx / 2}px,${dy / 2}px) scale(1.2)`, opacity: 1, offset: .3 }, { transform: `translate(${dx}px,${dy}px) scale(.8)`, opacity: 0 }], { duration: 1400, delay: i * 90, easing: 'ease-out' }).finished.then(() => h.remove()).catch(() => h.remove());
+    }
+    await say(`${this.foe.name} est devenu ton ami !`);
+  },
+};
 
 /* ---------- Fin de séance ---------- */
 async function screenEnd() {
@@ -1374,22 +1613,40 @@ async function evolveRun(ns) {
   const old = myForm(), comp = compById(S.companion), nf = comp.forms[ns - 1];
   const ev = $('#evo'); ev.hidden = false; ev.style.opacity = '1';
   ev.innerHTML = `<div class="rays" style="opacity:0;transition:opacity 1s"></div><div class="ring"></div>
-    <div class="evo-box"><div id="eOld">${creatureSVG(old.sp, {})}</div><div id="eNew" style="opacity:0">${creatureSVG(nf.sp, {})}</div></div><div class="flash"></div>
+    <div class="evo-box"><div id="eOld">${creatureSVG(old.sp, {})}</div><div id="eNew" style="opacity:0">${creatureSVG(nf.sp, {})}</div></div><div class="shock"></div><div class="flash"></div>
+    <div class="evo-name" id="eName">${nf.name}</div>
     <button class="big ok-btn" id="eOk" style="position:relative;z-index:3;margin-top:24px;visibility:hidden" aria-label="Continuer">${IC.check}</button>`;
   Snd.stopMusic();
   await say(`Oh ! Que se passe-t-il ? ${old.name} se met à briller !`);
   const eo = $('#eOld'), en = $('#eNew'), flash = $('.flash', ev);
   eo.classList.add('sil'); en.classList.add('sil');
   Snd.rise(3.6);
+  const fxc = (ELFX[comp.el] || ELFX.feu).cols;
+  ev.style.background = `radial-gradient(circle,${fxc[2]}88,transparent 45%),radial-gradient(circle,#3a2a7a,#140c30)`;
+  // énergie qui converge vers le compagnon
+  const orbs = setInterval(() => {
+    for (let k = 0; k < 3; k++) {
+      const o = document.createElement('div'); o.className = 'orb'; const c = pick(fxc); o.style.background = c; o.style.boxShadow = `0 0 12px 4px ${c}`; ev.appendChild(o);
+      const a = Math.random() * Math.PI * 2, r = Math.max(innerWidth, innerHeight) * .55;
+      o.animate([{ transform: `translate(${Math.cos(a) * r}px,${Math.sin(a) * r}px) scale(1.4)`, opacity: 0 }, { opacity: 1, offset: .3 }, { transform: 'translate(0,0) scale(.2)', opacity: .9 }],
+        { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(.5,0,.9,.6)' }).finished.then(() => o.remove()).catch(() => o.remove());
+    }
+  }, 90);
+  const box = $('.evo-box', ev);
+  box.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg) scale(1.02)' }, { transform: 'rotate(3deg) scale(1.04)' }, { transform: 'rotate(0)' }], { duration: 260, iterations: 14 });
   let d = 520; const t0 = performance.now();
   while (performance.now() - t0 < 3500) {
     eo.style.opacity = '1'; en.style.opacity = '0'; eo.style.transform = 'scale(1)'; await sleep(d);
     eo.style.opacity = '0'; en.style.opacity = '1'; en.style.transform = 'scale(1.08)'; await sleep(d * .8);
     d = Math.max(70, d * .72);
   }
-  flash.style.transition = 'opacity .15s'; flash.style.opacity = '1'; await sleep(250);
+  clearInterval(orbs);
+  flash.style.transition = 'opacity .15s'; flash.style.opacity = '1'; Snd.boom(); ev.classList.add('quake'); await sleep(250);
+  $('.shock', ev).animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(22)', opacity: 0 }], { duration: 900, easing: 'ease-out' });
   eo.style.opacity = '0'; en.classList.remove('sil'); en.style.opacity = '1'; en.style.transform = 'scale(1)';
   $('svg', en).classList.add('happy'); $('.rays', ev).style.opacity = '1';
+  en.animate([{ transform: 'scale(.3)' }, { transform: 'scale(1.25)', offset: .6 }, { transform: 'scale(1)' }], { duration: 800, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+  $('#eName').classList.add('on'); Confetti.burst(innerWidth / 2, innerHeight / 2, 120, 1.4, fxc);
   flash.style.transition = 'opacity 1.2s'; flash.style.opacity = '0';
   S.stage = ns; S.cards[S.companion + ns] = (S.cards[S.companion + ns] || 0) + 1; save();
   Snd.fanfare(); Confetti.rain(200);
@@ -1397,7 +1654,7 @@ async function evolveRun(ns) {
   await say(`Bravo ! ${old.name} a évolué ! Maintenant, c'est ${nf.name} ! Tu gagnes sa carte !`);
   $('#eOk').style.visibility = 'visible';
   await new Promise(r => { $('#eOk').onclick = r; });
-  Snd.tap(); ev.hidden = true; ev.innerHTML = ''; Snd.sync();
+  Snd.tap(); ev.hidden = true; ev.innerHTML = ''; ev.classList.remove('quake'); ev.style.background = ''; Snd.sync();
 }
 
 /* ---------- Paquets ---------- */
@@ -1458,7 +1715,8 @@ function screenCards() {
   const owned = CARDS.filter(c => S.cards[c.id]).length;
   s.innerHTML = `<div class="topbar"><button class="big round" id="bHome4" aria-label="Accueil">${IC.home}</button>
     <div class="mid" style="font-size:22px;font-weight:700;align-items:center">${IC.star().replace('<svg', '<svg style="width:28px"')} ${owned} / ${CARDS.length}</div>${musicBtn()}</div>
-    <div class="scroll"><div class="cardgrid">${CARDS.map(c => S.cards[c.id] ? cardHTML(c, { up: true, count: S.cards[c.id] }) : `<div class="slot">${creatureSVG(c.sp, { still: true, noShadow: true, attrs: 'style="filter:brightness(0)"' })}</div>`).join('')}</div></div>`;
+    ${owned < 3 ? `<div class="empty-msg">Termine une partie pour gagner un paquet de 3 cartes ! Les ombres sont les créatures à découvrir.</div>` : ''}
+    <div class="scroll"><div class="cardgrid">${CARDS.map(c => S.cards[c.id] ? cardHTML(c, { up: true, count: S.cards[c.id] }) : `<div class="slot" role="img" aria-label="Carte à découvrir">${creatureSVG(c.sp, { still: true, noShadow: true, noFx: true, attrs: 'style="filter:brightness(0)"' })}</div>`).join('')}</div></div>`;
   bindMusic(s);
   $('#bHome4').onclick = () => { Snd.tap(); screenHome(false); };
   $$('.cardgrid .card', s).forEach(el => el.onclick = () => zoomCard(cardById(el.dataset.id)));
@@ -1482,8 +1740,9 @@ function zoomCard(c) {
   el.addEventListener('pointermove', tilt); el.addEventListener('pointerdown', tilt); el.addEventListener('pointerleave', reset); el.addEventListener('pointerup', reset);
   const close = () => { z.hidden = true; z.innerHTML = ''; };
   z.onclick = e => { if (e.target === z) close(); };
-  $('#zClose').onclick = close;
+  $('#zClose').onclick = close; $('#zClose').focus({ preventScroll: true });
 }
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#zoom').hidden) { $('#zoom').hidden = true; $('#zoom').innerHTML = ''; } });
 
 /* ====================== Espace parent (appui long sur le soleil) ====================== */
 function openParent() {
@@ -1505,7 +1764,8 @@ function openParent() {
     <label for="pVoice" style="display:block;margin-top:8px">Voix française du téléphone</label>
     <select id="pVoice"><option value="">Automatique (${Voice.v ? Voice.v.name : 'aucune voix trouvée'})</option>${voices.map(v => `<option value="${v.voiceURI.replace(/"/g, '&quot;')}"${S.settings.voice === v.voiceURI ? ' selected' : ''}>${v.name} (${v.lang}${v.localService ? '' : ', en ligne'})</option>`).join('')}</select>
     <div><button class="pbtn ghost" id="pTest">Tester la voix</button></div>
-    <label><input type="checkbox" id="pMusic" ${S.settings.music ? 'checked' : ''}> Petite musique douce</label></section>
+    <label><input type="checkbox" id="pMusic" ${S.settings.music ? 'checked' : ''}> Musique d'aventure</label>
+    <label><input type="checkbox" id="pSubs" ${S.settings.subs !== false ? 'checked' : ''}> Sous-titres (affiche ce que dit la voix)</label></section>
   <section><h3>Progrès</h3><div class="stats">Compagnon : <b>${S.companion ? myForm().name : '—'}</b> (forme ${S.stage}/3, ${S.xp} points)<br>Séances terminées : ${S.sessions} · Cartes : ${CARDS.filter(c => S.cards[c.id]).length}/${CARDS.length}<br>
     ${EXOS.map(e => { const v = S.lv[e.id]; return v ? `${e.label} : niveau ${v.l}/3, ${v.ok}/${v.n} réussis du premier coup` : ''; }).filter(Boolean).join('<br>') || 'Pas encore de partie.'}</div></section>
   <section><h3>Paquets</h3><p class="small" id="pPacksTxt">${S.packs} paquet(s) en attente d'ouverture.</p><button class="pbtn ghost" id="pPacks">Supprimer les paquets en attente</button></section>
@@ -1526,7 +1786,7 @@ function openParent() {
     EXOS.forEach(e => S.settings.exos[e.id] = $('#ex-' + e.id).checked);
     if (!EXOS.some(e => S.settings.exos[e.id])) S.settings.exos.chiffres = true;
     S.settings.len = +$('#pLen').value; S.settings.rate = +$('#pRate').value;
-    S.settings.voice = $('#pVoice').value; S.settings.music = $('#pMusic').checked;
+    S.settings.voice = $('#pVoice').value; S.settings.music = $('#pMusic').checked; S.settings.subs = $('#pSubs').checked;
     save(); Voice.refresh();
   };
   $('#pTest').onclick = () => { apply(); Snd.init(); say(`Bonjour${S.name ? ' ' + S.name : ''} ! Touche la lettre ${LETTER_SAY.B}. Touche le chiffre trois.`); };
