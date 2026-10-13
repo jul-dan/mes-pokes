@@ -1,10 +1,10 @@
 {
-  "id": "./?app=compagnons-v2",
+  "id": "./",
   "name": "Mes p'tits compagnons",
   "short_name": "P'tits Compagnons",
   "description": "Jeu éducatif de maternelle : des compagnons qui évoluent, des combats amicaux et des cartes à collectionner.",
   "lang": "fr",
-  "start_url": "./?app=compagnons-v2",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
