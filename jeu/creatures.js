@@ -171,11 +171,16 @@
     const lid = style === 'fierce' ? `<path d="M${x - r * 1.1} ${y - r * 1.7} L${x + r * 1.15} ${y - r * 1.3} L${x + r * 1.15} ${y - r * .72} L${x - r * 1.1} ${y - r * 1.08}Z" fill="${h.b}"/><path d="M${x - r * 1.05} ${y - r * 1.06} L${x + r * 1.1} ${y - r * .7}" stroke="${h.K}" stroke-width="3.6" stroke-linecap="round"/>`
       : style === 'sharp' ? `<path d="M${x - r * .95} ${y - r * .5} Q${x} ${y - r * 1.45} ${x + r * 1.05} ${y - r * .75}" stroke="${h.K}" stroke-width="3.8" fill="none" stroke-linecap="round"/><path d="M${x - r * .9} ${y - r * 1.7} L${x + r * .9} ${y - r * 1.3}" stroke="${h.K}" stroke-width="3.2" stroke-linecap="round"/>`
         : `<path d="M${x - r * .95} ${y - r * .45} Q${x} ${y - r * 1.4} ${x + r * .95} ${y - r * .45}" stroke="${h.K}" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M${x - r * .85} ${y - r * .7} l-5 -4" stroke="${h.K}" stroke-width="2.4" stroke-linecap="round"/>`;
-    return `<g class="${h.an('eye')}"><ellipse cx="${x}" cy="${y}" rx="${r * .9}" ry="${r * 1.12}" fill="#fff" stroke="${h.K}" stroke-width="2.4"/>
-      <ellipse cx="${x + r * .1}" cy="${y + r * .12}" rx="${r * .7}" ry="${r * .92}" fill="url(#${h.id}E)"/>
-      <ellipse cx="${x + r * .12}" cy="${y + r * .18}" rx="${r * .34}" ry="${r * .5}" fill="#160c2a"/>
-      <circle cx="${x - r * .22}" cy="${y - r * .32}" r="${r * .33}" fill="#fff"/><circle cx="${x + r * .38}" cy="${y + r * .45}" r="${r * .15}" fill="#fff"/>
-      ${h.tier >= 3 ? `<polygon points="${stp(x + r * .3, y - r * .1, r * .26, r * .1, 4)}" fill="#fff"/>` : ''}${lid}</g>
+    const rays = [...Array(10)].map((_, i) => { const a = i * Math.PI / 5, ix = x + r * .1, iy = y + r * .12; return `M${(ix + Math.cos(a) * r * .38).toFixed(1)} ${(iy + Math.sin(a) * r * .52).toFixed(1)} L${(ix + Math.cos(a) * r * .62).toFixed(1)} ${(iy + Math.sin(a) * r * .84).toFixed(1)}`; }).join(' ');
+    return `<g class="${h.an('eye')}"><ellipse cx="${x}" cy="${y}" rx="${r * .92}" ry="${r * 1.14}" fill="url(#${h.id}S)" stroke="${h.K}" stroke-width="2.2"/>
+      <ellipse cx="${x + r * .1}" cy="${y + r * .12}" rx="${r * .72}" ry="${r * .94}" fill="url(#${h.id}E)" stroke="#120826" stroke-width="1.4"/>
+      <path d="${rays}" stroke="#fff" stroke-width=".9" opacity=".35"/>
+      <ellipse cx="${x + r * .1}" cy="${y + r * .12}" rx="${r * .5}" ry="${r * .68}" fill="none" stroke="${mix(h.eyeC, '#fff', .6)}" stroke-width="1.2" opacity=".55"/>
+      <ellipse cx="${x + r * .12}" cy="${y + r * .18}" rx="${r * .32}" ry="${r * .48}" fill="#120826"/>
+      <path d="M${x - r * .6} ${y + r * .5} Q${x + r * .1} ${y + r * 1.05} ${x + r * .78} ${y + r * .45}" stroke="#fff" stroke-width="1.6" fill="none" opacity=".45"/>
+      <ellipse cx="${x - r * .24}" cy="${y - r * .34}" rx="${r * .34}" ry="${r * .3}" fill="#fff"/><circle cx="${x + r * .4}" cy="${y + r * .48}" r="${r * .16}" fill="#fff"/><circle cx="${x + r * .38}" cy="${y - r * .28}" r="${r * .09}" fill="#fff"/>
+      ${h.tier >= 3 ? `<polygon points="${stp(x + r * .3, y - r * .05, r * .28, r * .09, 4)}" fill="#fff"/>` : ''}
+      <path d="M${x - r * .5} ${y + r * 1.22} q${r * .5} ${r * .18} ${r * 1.0} 0" stroke="${h.K}" stroke-width="1.3" fill="none" opacity=".6"/>${lid}</g>
       <g class="xeye"><path d="M${x - r * .6} ${y - r * .6} L${x + r * .6} ${y} L${x - r * .6} ${y + r * .6}" stroke="${h.K}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
   }
   function mouth(h, P, kind) {
@@ -190,7 +195,7 @@
   function drawCreature(sp, o = {}) {
     const A = sp.art, P = PLANS[A.plan] || PLANS.quad, id = 'k' + (++U), tier = sp.tier || 1;
     const b = sp.mid || sp.c1, l = sp.c1, d = sp.c2, a = sp.acc || d, belly = sp.belly || '#fff', K = mix(d, '#1a0f30', .62);
-    const st = !!o.still, h = { id, sp: A, tier, b, l, d, a, K, B: `url(#${id}B)`, A: `url(#${id}A)`, C: `url(#${id}C)`, D: d, L: l, an: c => st ? '' : c };
+    const st = !!o.still, h = { id, sp: A, tier, eyeC: sp.eye || d, b, l, d, a, K, B: `url(#${id}B)`, A: `url(#${id}A)`, C: `url(#${id}C)`, D: d, L: l, an: c => st ? '' : c };
     const parts = P.draw(h);
     const at = (k, xy) => xy ? [xy[0], xy[1]] : null;
     const back = [], mid = [], front = [];
@@ -214,6 +219,33 @@
     if (A.crest) { const [cx, cy] = A.crestAt || P.crest; head.push(CRESTS[A.crest](h, cx, cy)); }
     head.push(`<ellipse cx="${100 - 18}" cy="${(P.hc[1] - 30)}" rx="12" ry="6" fill="#fff" opacity=".28" transform="rotate(-25 ${100 - 18} ${P.hc[1] - 30})"/>`);
     (o.noFx ? [] : A.extras || []).filter(x => ['bubbles', 'sparkles'].includes(x)).forEach(x => front.push(EXTRAS[x](h, P)));
+    // ---- détails « manga » : textures, reflets, hachures ----
+    const seed = [...(sp.name || A.plan + (A.crest || '') + (A.ears || ''))].reduce((t, c) => (t * 31 + c.charCodeAt(0)) >>> 0, 7);
+    let rs = seed || 1; const R = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
+    const bodyD = (parts.body.match(/d="([^"]+)"/) || [])[1], headD = ((parts.head || '').match(/d="([^"]+)"/) || [])[1];
+    const clipB = bodyD ? `<clipPath id="${id}cb"><path d="${bodyD}"/></clipPath>` : '', clipH = headD && !P.beak ? `<clipPath id="${id}ch"><path d="${headD}"/></clipPath>` : '';
+    const kind = A.tex || ({ eau: 'scale', plante: 'vein', eclair: 'fur', feu: 'fur', roche: 'facet', glace: 'facet', ciel: 'feather', etoile: 'dot' }[sp.elx] || 'fur');
+    const kd = A.plan === 'bird' ? 'feather' : A.plan === 'fish' ? 'scale' : A.plan === 'ghost' ? 'wisp' : kind;
+    const texStroke = (cx, cy) => {
+      if (kd === 'scale') return `<path d="M${cx - 5} ${cy} q5 6 10 0" stroke="${K}" stroke-width="1.3" fill="none" opacity=".32"/><path d="M${cx - 3} ${cy + 1.5} q3 3 6 0" stroke="#fff" stroke-width="1" fill="none" opacity=".45"/>`;
+      if (kd === 'feather') return `<path d="M${cx - 6} ${cy - 2} q6 7 12 0" stroke="${K}" stroke-width="1.4" fill="none" opacity=".35"/>`;
+      if (kd === 'vein') return `<path d="M${cx} ${cy} l6 -6 M${cx + 3} ${cy - 3} l3 1" stroke="${mix(d, '#000', .3)}" stroke-width="1.2" fill="none" opacity=".4"/>`;
+      if (kd === 'facet') return `<path d="M${cx - 5} ${cy + 3} l5 -8 l5 8" stroke="#fff" stroke-width="1.3" fill="none" opacity=".55"/>`;
+      if (kd === 'wisp') return `<path d="M${cx - 6} ${cy} q4 -5 8 -1 q3 3 5 -2" stroke="#fff" stroke-width="1.2" fill="none" opacity=".45"/>`;
+      if (kd === 'dot') return `<circle cx="${cx}" cy="${cy}" r="1.3" fill="#fff" opacity=".7"/>`;
+      const a = (R() - .5) * 50; return `<path d="M${cx} ${cy} q2 -5 1 -9" transform="rotate(${a.toFixed(0)} ${cx} ${cy})" stroke="${K}" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".38"/>`;
+    };
+    const scatter = (n, x0, y0, w, hh) => [...Array(n)].map(() => texStroke(+(x0 + R() * w).toFixed(1), +(y0 + R() * hh).toFixed(1))).join('');
+    const texB = clipB ? `<g clip-path="url(#${id}cb)">${scatter(22, 50, P.chest[1] - 36, 100, 70)}</g>` : '';
+    const texH = clipH ? `<g clip-path="url(#${id}ch)">${scatter(12, 62, P.hc[1] - 40, 76, 30)}${scatter(6, 60, P.hc[1] + 4, 20, 22)}${scatter(6, 120, P.hc[1] + 4, 20, 22)}</g>` : '';
+    // contre-jour / ombre portée interne en hachures croisées (bas-droite du corps)
+    const hatch = clipB ? `<g clip-path="url(#${id}cb)" opacity=".22">${[...Array(9)].map((_, i) => `<path d="M${118 + i * 5} ${P.chest[1] + 30} l18 -26" stroke="${K}" stroke-width="1.2"/>`).join('')}</g>` : '';
+    mid.splice(1, 0, texB + hatch);
+    const shine = !P.beak ? `<path d="M${100 - 26} ${P.hc[1] - 26} Q100 ${P.hc[1] - 40} ${100 + 26} ${P.hc[1] - 26}" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".42"/><path d="M${100 - 12} ${P.hc[1] - 33} l6 -3" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>` : '';
+    const blush = mir(`<path d="M${100 - P.eyeDX - 15} ${P.eyeY + 17} l4 -5 M${100 - P.eyeDX - 10} ${P.eyeY + 18} l4 -5 M${100 - P.eyeDX - 5} ${P.eyeY + 18} l4 -5" stroke="#e0407a" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>`);
+    head.splice(head.length - 1, 0, texH, blush, shine);
+    const kira = !o.noFx ? [[30, 44, 9], [172, 56, 7], [176, 150, 6]].slice(0, tier).map(([x, y, r]) => `<g class="${h.an('twinkle')}"><polygon points="${stp(x, y, r, r * .22, 4)}" fill="#fff" stroke="${K}" stroke-width="1.4" stroke-linejoin="round"/></g>`).join('') : '';
+
     // effets selon le niveau
     const fxc = sp.auraColor || a, fxB = [], fxF = [];
     if (!o.noFx && tier >= 2) fxF.push([[36, 70, 0], [166, 82, .7], [160, 160, 1.3]].map(([x, y, dl]) => `<polygon class="${h.an('twinkle')}" style="animation-delay:${dl}s" points="${stp(x, y, 6, 2, 4)}" fill="#fff8c4"/>`).join(''));
@@ -222,6 +254,7 @@
       fxB.push(`<g class="${h.an('fx-spin')}"><circle cx="100" cy="118" r="88" fill="none" stroke="${fxc}" stroke-width="3" stroke-dasharray="3 13" stroke-linecap="round" opacity=".85"/></g>`);
       for (let i = 0; i < 3; i++) fxF.push(`<g class="${h.an('fx-orbit' + (i % 2 ? ' rev' : ''))}" style="animation-delay:-${i * 1.6}s"><g transform="rotate(${i * 120} 100 118)"><circle cx="100" cy="28" r="4.5" fill="#fff" filter="url(#${id}gl)"/><circle cx="100" cy="28" r="9" fill="${fxc}" opacity=".45"/></g></g>`);
     }
+    fxF.push(kira);
     const s = A.scale || 1, fl = P.float || A.float;
     const defs = `<defs>
       <radialGradient id="${id}B" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="${mix(l, '#fff', .35)}"/><stop offset=".3" stop-color="${l}"/><stop offset=".36" stop-color="${b}"/><stop offset=".78" stop-color="${b}"/><stop offset=".84" stop-color="${d}"/><stop offset="1" stop-color="${d}"/></radialGradient>
@@ -235,14 +268,31 @@
       <linearGradient id="${id}X" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cdf3ff"/><stop offset="1" stop-color="#86c8f0"/></linearGradient>
       <linearGradient id="${id}O" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a0"/><stop offset=".5" stop-color="#ffc83a"/><stop offset="1" stop-color="#d08a10"/></linearGradient>
       <linearGradient id="${id}H" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fff6e0"/><stop offset="1" stop-color="${a}"/></linearGradient>
+      <linearGradient id="${id}S" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8c0e8"/><stop offset=".35" stop-color="#ffffff"/></linearGradient>
+      <filter id="${id}M" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="bl"/>
+        <feDiffuseLighting in="bl" surfaceScale="7" diffuseConstant="1.05" lighting-color="#fff" result="lit"><feDistantLight azimuth="225" elevation="38"/></feDiffuseLighting>
+        <feComponentTransfer in="lit" result="cel"><feFuncR type="discrete" tableValues=".6 .8 .8 1 1"/><feFuncG type="discrete" tableValues=".56 .78 .78 1 1"/><feFuncB type="discrete" tableValues=".72 .86 .86 1 1"/></feComponentTransfer>
+        <feBlend in="SourceGraphic" in2="cel" mode="multiply" result="shaded"/>
+        <feSpecularLighting in="bl" surfaceScale="7" specularConstant="1" specularExponent="22" lighting-color="#fff" result="sp"><feDistantLight azimuth="225" elevation="48"/></feSpecularLighting>
+        <feComponentTransfer in="sp" result="spc"><feFuncA type="discrete" tableValues="0 0 0 .55 .55"/></feComponentTransfer>
+        <feSpecularLighting in="bl" surfaceScale="7" specularConstant="1.2" specularExponent="12" lighting-color="${mix(h.sp.rim || a, '#fff', .55)}" result="rm"><feDistantLight azimuth="40" elevation="12"/></feSpecularLighting>
+        <feComponentTransfer in="rm" result="rmc"><feFuncA type="discrete" tableValues="0 0 0 0 .55"/></feComponentTransfer>
+        <feMerge result="lit2"><feMergeNode in="shaded"/><feMergeNode in="spc"/><feMergeNode in="rmc"/></feMerge>
+        <feComposite in="lit2" in2="SourceAlpha" operator="in" result="body"/>
+        <feMorphology in="SourceAlpha" operator="dilate" radius="1.4" result="dl"/><feOffset in="dl" dx="1.3" dy="1.8" result="dlo"/>
+        <feFlood flood-color="${K}"/><feComposite in2="dlo" operator="in" result="ink"/>
+        <feMerge><feMergeNode in="ink"/><feMergeNode in="body"/></feMerge>
+      </filter>
       <radialGradient id="${id}g"><stop offset="0" stop-color="${fxc}" stop-opacity=".7"/><stop offset=".6" stop-color="${fxc}" stop-opacity=".22"/><stop offset="1" stop-color="${fxc}" stop-opacity="0"/></radialGradient>
       <filter id="${id}gl" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       ${tier >= 3 && !o.noFx ? `<filter id="${id}bg" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="${fxc}" flood-opacity=".9"/></filter>` : ''}
+      ${clipB}${clipH}
     </defs>`;
     const shadow = o.noShadow ? '' : `<ellipse class="${h.an(fl ? 'cr-shadow' : '')}" cx="100" cy="184" rx="${48 * s}" ry="7" fill="#2d2350" opacity=".16"/>`;
     return `<svg class="crt${o.happy ? ' happy' : ''}" viewBox="${o.vb || '0 0 200 200'}" ${o.attrs || ''} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${defs}${shadow}${fxB.join('')}
-      <g transform="translate(100 182) scale(${s}) translate(-100 -182)"><g class="cr-all"><g class="${h.an(fl ? 'cr-float' : '')}"><g class="${h.an('cr-breath')}"${tier >= 3 && !o.noFx ? ` filter="url(#${id}bg)"` : ''}>
-        ${back.join('')}${mid.join('')}<g class="${h.an('cr-head')}" style="transform-origin:${P.neck[0]}px ${P.neck[1]}px">${head.join('')}</g>${front.join('')}
+      <g transform="translate(100 182) scale(${s}) translate(-100 -182)"><g class="cr-all"><g class="${h.an(fl ? 'cr-float' : '')}"><g class="${h.an('cr-breath')}"${tier >= 3 && !o.noFx ? ` filter="url(#${id}bg)"` : ''}><g filter="url(#${id}M)">
+        ${back.join('')}${mid.join('')}<g transform="rotate(${A.tilt != null ? A.tilt : [0, 5, -3, -5][tier]} ${P.neck[0]} ${P.neck[1]})"><g class="${h.an('cr-head')}" style="transform-origin:${P.neck[0]}px ${P.neck[1]}px">${head.join('')}</g></g></g>${front.join('')}
       </g></g></g></g>${fxF.join('')}</svg>`;
   }
 
