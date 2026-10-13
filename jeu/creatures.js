@@ -350,3 +350,31 @@
   window.CREATURE_ART = ART;
   window.drawCreature = drawCreature;
 })();
+
+/* ===== Illustrations manga (images) : remplacent les dessins vectoriels ===== */
+(function () {
+  const slug = n => n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const FLOAT = { ghost: 1, fish: 1, bird: 1 };
+  const url = sp => 'img/creatures/' + slug(sp.name || '') + '.webp';
+  const stp = (cx, cy, r1, r2, n = 5) => { const p = []; for (let i = 0; i < n * 2; i++) { const r = i % 2 ? r2 : r1, a = -Math.PI / 2 + i * Math.PI / n; p.push((cx + Math.cos(a) * r).toFixed(1) + ',' + (cy + Math.sin(a) * r).toFixed(1)); } return p.join(' '); };
+  let U = 0;
+  function drawCreatureImg(sp, o = {}) {
+    const A = sp.art || {}, tier = sp.tier || 1, st = !!o.still, an = c => st ? '' : c, src = url(sp);
+    if (o.lazy) return `<img class="crt-flat" src="${src}" alt="" loading="lazy" decoding="async" draggable="false" ${o.attrs || ''}>`;
+    const id = 'q' + (++U), s = A.scale || 1, fl = FLOAT[A.plan], fxc = sp.auraColor || sp.acc || '#ffd84a';
+    const fxB = [], fxF = [];
+    if (!o.noFx && tier >= 2) fxF.push([[30, 58, 0], [172, 70, .7], [166, 162, 1.3]].map(([x, y, d]) => `<polygon class="${an('twinkle')}" style="animation-delay:${d}s" points="${stp(x, y, 7, 2, 4)}" fill="#fff8c4" stroke="#5a3a80" stroke-width="1"/>`).join(''));
+    if (!o.noFx && tier >= 3) {
+      fxB.push(`<circle cx="100" cy="118" r="96" fill="url(#${id}g)" class="${an('fx-pulse')}"/>`);
+      fxB.push(`<g class="${an('fx-spin')}"><circle cx="100" cy="118" r="90" fill="none" stroke="${fxc}" stroke-width="3" stroke-dasharray="3 13" stroke-linecap="round" opacity=".85"/></g>`);
+      for (let i = 0; i < 3; i++) fxF.push(`<g class="${an('fx-orbit' + (i % 2 ? ' rev' : ''))}" style="animation-delay:-${i * 1.6}s"><g transform="rotate(${i * 120} 100 118)"><circle cx="100" cy="26" r="4.5" fill="#fff"/><circle cx="100" cy="26" r="9" fill="${fxc}" opacity=".45"/></g></g>`);
+    }
+    const shadow = o.noShadow ? '' : `<ellipse class="${an(fl ? 'cr-shadow' : '')}" cx="100" cy="187" rx="${50 * s}" ry="7" fill="#2d2350" opacity=".2"/>`;
+    return `<svg class="crt crt-img${o.happy ? ' happy' : ''}" viewBox="${o.vb || '0 0 200 200'}" ${o.attrs || ''} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs><radialGradient id="${id}g"><stop offset="0" stop-color="${fxc}" stop-opacity=".7"/><stop offset=".6" stop-color="${fxc}" stop-opacity=".22"/><stop offset="1" stop-color="${fxc}" stop-opacity="0"/></radialGradient></defs>
+      ${shadow}${fxB.join('')}<g transform="translate(100 188) scale(${s}) translate(-100 -188)"><g class="cr-all"><g class="${an(fl ? 'cr-float' : '')}"><g class="${an('cr-breath')}">
+      <image href="${src}" x="-2" y="-8" width="204" height="204" preserveAspectRatio="xMidYMax meet"/></g></g></g></g>${fxF.join('')}</svg>`;
+  }
+  window.creatureImgURL = url;
+  window.drawCreatureImg = drawCreatureImg;
+})();
