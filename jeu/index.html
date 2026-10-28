@@ -283,6 +283,70 @@ button{font-family:inherit;color:inherit}
 .crt-img{filter:drop-shadow(0 6px 6px rgba(45,35,80,.22))}
 .fighter.hit .crt-img{animation:flashImg .45s}
 @keyframes flashImg{0%,40%{filter:brightness(2.6) saturate(.4)}100%{filter:none}}
+
+
+/* ====== nouveaux exercices ====== */
+.emo{font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:min(24vw,96px);line-height:1;display:block}
+.choices.c3 .emo{font-size:min(19vw,76px)}
+.prompt .emo{font-size:min(26vw,104px)}
+.wordcard{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 22px}
+.wordcard .wd{font-family:var(--font-print);font-size:min(9vw,34px);letter-spacing:.06em;font-weight:900;color:var(--ink)}
+.wordcard .wd b{color:#e8433a}
+.prompt .bignum{font-family:var(--font-print);font-size:min(30vw,112px);line-height:1;font-weight:900;padding:0 26px}
+.choice .drums{display:flex;flex-wrap:wrap;gap:2px 4px;justify-content:center;align-content:center;width:100%;height:100%}
+.choice .drums svg{width:42%;height:auto;max-width:56px;flex:none}
+.choice.drumpick{padding:6px}
+.cover{position:absolute;inset:0;border-radius:24px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,#8b6cf0,#8b6cf0 12px,#a58cff 12px,#a58cff 24px);color:#fff;font-size:min(30vw,110px);font-weight:700;cursor:pointer;box-shadow:inset 0 0 0 6px #fff}
+.numrow{display:flex;gap:2%;align-items:center;justify-content:center;width:100%}
+.numrow>div{width:17%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--font-print);font-size:min(11vw,44px);font-weight:900;border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(45,35,80,.15)}
+.numrow>div.q{border:4px dashed var(--violet);background:#f7f5ff;color:var(--violet)}
+.txtfig{font-family:var(--font-print);font-weight:900;font-size:min(7.5vw,32px);letter-spacing:.08em;color:var(--ink)}
+.prompt .txtfig{font-size:min(10vw,42px)}
+.obj.arrive{animation:wiggle 1.4s ease-in-out infinite}
+.choice .badge{top:6px;right:6px;background:var(--ok)}
+@media (max-height:720px){
+  .stage{gap:12px}
+  .panel{padding:8px;border-radius:22px}
+  .choices{gap:10px}
+  .choices.c4 .choice,.choices.c2 .choice{aspect-ratio:1.4}
+  .emo{font-size:min(20vw,66px)}
+  .prompt .emo{font-size:min(20vw,70px)}
+  .choices .emo,.choices.c3 .emo{font-size:min(15vw,54px)}
+  .prompt .bignum{font-size:min(22vw,78px);padding:0 18px}
+  .wordcard{padding:6px 16px;gap:2px}.wordcard .wd{font-size:min(8vw,28px)}
+  .choices.c4 .glyph{font-size:min(22vw,78px)}
+  .choices.c3 .choice{aspect-ratio:1.05}
+  .cover{font-size:60px}
+}
+/* ====== cartes dorées ====== */
+.card.goldfoil .face.front{background-size:300% 300%!important;animation:foil 5s linear infinite}
+@keyframes foil{from{background-position:0% 0%}to{background-position:300% 300%}}
+.goldfoil .holo{opacity:.65!important;animation-duration:2.2s!important;mix-blend-mode:color-dodge;background:linear-gradient(115deg,transparent 20%,#fff 42%,#ffe680 50%,#fff 58%,transparent 72%)!important;background-size:250% 250%!important}
+.goldfoil .nm{color:#5a3300!important;text-shadow:0 1px 0 #fff6c0,0 0 6px rgba(255,255,255,.7)!important}
+.gspk{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+.gspk i{position:absolute;width:13px;height:13px;background:#fff;filter:drop-shadow(0 0 3px #ffd34d);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:gtw 1.7s ease-in-out infinite}
+.gspk i:nth-child(1){left:10%;top:16%}.gspk i:nth-child(2){left:78%;top:30%;animation-delay:.5s}.gspk i:nth-child(3){left:20%;top:62%;animation-delay:1s;width:9px;height:9px}.gspk i:nth-child(4){left:70%;top:72%;animation-delay:.25s}.gspk i:nth-child(5){left:46%;top:8%;animation-delay:.8s;width:9px;height:9px}
+@keyframes gtw{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
+.gribbon{position:absolute;top:7px;left:7px;z-index:4;background:linear-gradient(180deg,#fff3a0,#e8a91a);color:#6a3e00;font-weight:700;font-size:11px;line-height:1;padding:3px 8px;border-radius:9px;box-shadow:0 1px 0 #8a5a00;display:flex;gap:3px;align-items:center}
+.count.g{background:#d9961a}
+.gbadge{position:absolute;top:-6px;left:-6px;z-index:4;width:26px;height:26px;border-radius:50%;background:linear-gradient(180deg,#fff3a0,#e8a91a);box-shadow:0 2px 0 #8a5a00,0 0 10px rgba(255,214,77,.9);display:flex;align-items:center;justify-content:center}
+.gbadge>svg{width:16px;height:16px}
+.card.goldhint .face.back{box-shadow:0 0 0 3px #ffd34d,0 0 22px 6px rgba(255,214,77,.9);animation:hintpulse 1.1s ease-in-out infinite alternate}
+@keyframes hintpulse{to{box-shadow:0 0 0 5px #fff3a0,0 0 40px 14px rgba(255,214,77,1)}}
+.card.charging{animation:charge .14s linear infinite;z-index:5}
+.card.charging .face.back{box-shadow:0 0 0 4px #fff3a0,0 0 70px 26px rgba(255,214,77,1)}
+@keyframes charge{0%{transform:translate(-2px,1px) rotate(-1.6deg) scale(1.1)}50%{transform:translate(2px,-1px) rotate(1.6deg) scale(1.15)}100%{transform:translate(-2px,1px) rotate(-1.6deg) scale(1.1)}}
+.goldveil{position:absolute;inset:0;z-index:1;pointer-events:none;animation:veilIn 2s ease-in forwards}
+@keyframes veilIn{from{background:rgba(20,10,50,0)}to{background:radial-gradient(circle at 50% 45%,rgba(255,214,77,.35),rgba(20,10,50,.7) 70%)}}
+.goldveil.flash{animation:veilFlash .8s ease-out forwards}
+@keyframes veilFlash{0%{background:#fff}100%{background:rgba(255,255,255,0)}}
+.pack.goldpack{filter:drop-shadow(0 0 18px #ffd34d) drop-shadow(0 0 36px #ffb020);animation:packgold .35s linear infinite}
+@keyframes packgold{0%,100%{transform:rotate(-3deg) scale(1.05)}50%{transform:rotate(3deg) scale(1.1)}}
+.gsec{position:relative;z-index:2;width:100%;display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;margin:14px 0 8px;color:#7a4a00}
+.gsec svg{width:30px;height:30px}
+.goldslot{aspect-ratio:auto;padding:14px;text-align:center;color:var(--ink-soft);font-size:15px;border-color:rgba(217,150,26,.5);background:rgba(255,235,160,.35);grid-column:1/-1}
+.gtag{display:inline-flex;align-items:center;gap:4px;margin-left:12px;color:#8a5a00}
+.gtag svg{width:26px;height:26px}
 /* ====== animations des nouvelles créatures ====== */
 .crt .xeye{display:none}.crt.hurt .eye{display:none}.crt.hurt .xeye{display:inline}
 .crt.atk .mo-happy,.crt.hurt .mo-happy{display:inline}.crt.atk .mo-calm,.crt.hurt .mo-calm{display:none}
@@ -362,12 +426,26 @@ const EXOS = [
   { id: 'suites', label: 'Algorithmes (suites)' },
   { id: 'positions', label: 'Positions (sur, sous, dans)' },
   { id: 'puzzle', label: 'Puzzle (pièce manquante)' },
+  { id: 'minmaj', label: 'Lecture : grande et petite lettre' },
+  { id: 'debut', label: 'Lecture : première lettre d\'un mot' },
+  { id: 'syllabes', label: 'Lecture : syllabes (tambours)' },
+  { id: 'rimes', label: 'Lecture : rimes' },
+  { id: 'identique', label: 'Lecture : trouver le pareil' },
+  { id: 'compter10', label: 'Calcul : dénombrer jusqu\'à 10' },
+  { id: 'quantite', label: 'Calcul : chiffre et quantité' },
+  { id: 'plusmoins', label: 'Calcul : plus, moins, autant' },
+  { id: 'plusun', label: 'Calcul : un de plus / un de moins' },
+  { id: 'subitizing', label: 'Calcul : voir vite (dés)' },
+  { id: 'suitenum', label: 'Calcul : suite des chiffres' },
+  { id: 'ranger', label: 'Calcul : ranger dans l\'ordre' },
+  { id: 'motifs', label: 'Suites d\'images (motifs)' },
 ];
 function defaultState() {
   return {
     v: 1, name: '', companion: null, xp: 0, stage: 1, cards: {}, packs: 0, sessions: 0,
     settings: { exos: Object.fromEntries(EXOS.map(e => [e.id, true])), rate: 0.9, music: true, len: 6, voice: '', start: 1, subs: true },
     lv: {}, firstRun: true,
+    gold: {}, goldPity: 0,
   };
 }
 let S = defaultState();
@@ -540,6 +618,15 @@ const Snd = {
     g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + .35); o.connect(g); g.connect(this.master); o.start(t); o.stop(t + .4);
   },
   friend() { this.seq([784, 988, 1175, 1568], .09, 'triangle', .14, .4); this.seq([1568, 0, 1976, 0, 2349], .09, 'sine', .05, .5); },
+  roll() {
+    if (!this.ctx) return; const t = this.ctx.currentTime + .02; let at = 0, gap = .2;
+    while (at < 1.9) { this.noise(t + at, .09, .09 + at * .06, 1400 + at * 600, 'bandpass'); this.tone(110 + at * 90, t + at, .1, 'triangle', .05); at += gap; gap = Math.max(.05, gap * .87); }
+    this.rise(2);
+  },
+  goldCard() {
+    if (!this.ctx) return; this.seq([784, 988, 1175, 1568, 1976, 2349, 3136], .06, 'triangle', .18, .7); this.seq([1568, 1976, 2349, 3136, 3951], .09, 'sine', .06, .9);
+    this.noise(this.ctx.currentTime, .5, .18, 5000, 'highpass'); setTimeout(() => this.fanfare(), 350);
+  },
   boom() { if (!this.ctx) return; const t = this.ctx.currentTime; this.kick(t, this.master); this.noise(t, .9, .4, 700, 'lowpass'); },
   stopMusic() { this.playing = false; clearTimeout(this.timer); if (this.ctx) this.musicGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + .3); },
   duck(on) { if (!this.ctx || !this.playing) return; const g = this.musicGain.gain, t = this.ctx.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(on ? .35 : 1, t + .25); },
@@ -643,6 +730,7 @@ const IC = {
   check: '<svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   cards: '<svg viewBox="0 0 64 64"><rect x="8" y="12" width="28" height="40" rx="5" transform="rotate(-12 22 32)" fill="#5fb8ff" stroke="#2d2350" stroke-width="3"/><rect x="26" y="10" width="28" height="40" rx="5" transform="rotate(10 40 30)" fill="#ffc93c" stroke="#2d2350" stroke-width="3"/><path d="M40 22l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1Z" fill="#fff" transform="rotate(10 40 30)"/></svg>',
   pack: '<svg viewBox="0 0 64 64"><path d="M14 8h36l-2 6 2 6v30l-2 6 2 6H14l2-6-2-6V20l2-6Z" fill="#b28cff" stroke="#2d2350" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="35" r="11" fill="#ffc93c" stroke="#2d2350" stroke-width="3"/><path d="M32 28l2 5 5 .5-4 3 1.5 5-4.5-3-4.5 3 1.5-5-4-3 5-.5Z" fill="#fff"/></svg>',
+  goldstar: '<svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8Z" fill="#fff3a0" stroke="#8a5a00" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6l1.6 3.8 4 .4-3 2.7.9 4-3.5-2.1" fill="#e8a91a"/></svg>',
   star: (f = '#ffc93c') => `<svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8Z" fill="${f}" stroke="#2d2350" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
   sun: '<svg viewBox="0 0 64 64"><g stroke="#ffb020" stroke-width="5" stroke-linecap="round">' + [0, 45, 90, 135, 180, 225, 270, 315].map(a => `<path d="M32 6v7" transform="rotate(${a} 32 32)"/>`).join('') + '</g><circle cx="32" cy="32" r="15" fill="#ffc93c" stroke="#ffb020" stroke-width="3"/><circle cx="27" cy="30" r="2.4" fill="#2d2350"/><circle cx="37" cy="30" r="2.4" fill="#2d2350"/><path d="M27 37q5 4 10 0" stroke="#2d2350" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
 };
@@ -879,25 +967,56 @@ const cardById = id => CARDS.find(c => c.id === id);
 
 /* ---- Carte à collectionner ---- */
 function cardHTML(cd, o = {}) {
-  const e = EL[cd.el], rar = { c: 'common', r: 'rare', o: 'gold' }[cd.rar];
-  const frame = { c: 'linear-gradient(135deg,#ffffff,#eef0ff)', r: 'linear-gradient(135deg,#f4f7ff,#b9c4dc,#ffffff,#9aa8c8)', o: 'linear-gradient(135deg,#fff3b0,#e6a91a,#fff6c8,#c98a10,#ffe27a)' }[cd.rar];
+  const e = EL[cd.el], rar = { c: 'common', r: 'rare', o: 'gold' }[cd.rar], gold = !!(cd.gold || o.gold);
+  let frame = { c: 'linear-gradient(135deg,#ffffff,#eef0ff)', r: 'linear-gradient(135deg,#f4f7ff,#b9c4dc,#ffffff,#9aa8c8)', o: 'linear-gradient(135deg,#fff3b0,#e6a91a,#fff6c8,#c98a10,#ffe27a)' }[cd.rar];
   const nst = { c: 1, r: 2, o: 3 }[cd.rar], stc = { c: '#ffffff', r: '#dfe6ff', o: '#ffd34d' }[cd.rar];
-  return `<div class="card ${rar}${o.up ? ' up' : ''}" data-id="${cd.id}">
+  if (gold) frame = 'linear-gradient(135deg,#fff3b0,#e6a91a,#fff6c8,#c98a10,#ffe27a,#e6a91a)';
+  const bodyBg = gold ? 'linear-gradient(170deg,#fff6bd,#f0b52a)' : `linear-gradient(170deg,${e.bg[0]},${e.bg[1]})`;
+  const artBg = gold ? 'radial-gradient(circle at 50% 40%,#fffdf0,rgba(255,226,110,.6) 72%)' : 'radial-gradient(circle at 50% 40%,rgba(255,255,255,.9),rgba(255,255,255,.25) 70%)';
+  return `<div class="card ${rar}${gold ? ' goldfoil' : ''}${o.up ? ' up' : ''}" data-id="${cd.id}"${gold ? ' data-gold="1"' : ''}${gold ? ` aria-label="${cd.name} doré"` : ''}>
     <div class="inner">
       <div class="face back" style="background:radial-gradient(circle at 50% 45%,#8b6cf0,#3b258f 70%);">
         <div style="position:absolute;inset:6px;border-radius:10px;border:3px solid rgba(255,255,255,.55);background:radial-gradient(rgba(255,255,255,.18) 2px,transparent 2.5px) 0 0/14px 14px"></div>
         <div style="position:absolute;inset:28%;">${IC.sun}</div>
       </div>
       <div class="face front" style="background:${frame}">
-        <div style="position:absolute;inset:5px;border-radius:10px;background:linear-gradient(170deg,${e.bg[0]},${e.bg[1]});display:flex;flex-direction:column;padding:7%;gap:4%">
-          <div class="art" style="background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.9),rgba(255,255,255,.25) 70%)">${creatureSVG(cd.sp, { lazy: true, still: !o.anim })}</div>
+        <div style="position:absolute;inset:5px;border-radius:10px;background:${bodyBg};display:flex;flex-direction:column;padding:7%;gap:4%">
+          <div class="art" style="background:${artBg}">${creatureSVG(cd.sp, { lazy: true, still: !o.anim })}</div>
           <div class="nm">${cd.name}</div>
           <div class="stars">${IC.star(stc).repeat(nst)}</div>
           <div class="el">${e.ic}</div>
         </div>
-        ${cd.rar !== 'c' ? '<div class="holo"></div>' : ''}<div class="glare"></div>
+        ${cd.rar !== 'c' || gold ? '<div class="holo"></div>' : ''}${gold ? `<div class="gspk"><i></i><i></i><i></i><i></i><i></i></div><div class="gribbon">${IC.goldstar} OR</div>` : ''}<div class="glare"></div>
       </div>
-    </div>${o.count > 1 ? `<div class="count">×${o.count}</div>` : ''}</div>`;
+    </div>${o.count > 1 ? `<div class="count${gold ? ' g' : ''}">×${o.count}</div>` : ''}${o.gbadge ? `<div class="gbadge" role="img" aria-label="Version dorée obtenue">${IC.goldstar}</div>` : ''}</div>`;
+}
+const GOLD_CHANCE = .12, GOLD_PITY = 6;   // ~1 paquet sur 5 au final (12 % + garantie) ; au plus 6 paquets sans carte dorée, le 7e en contient forcément une
+const GOLD_COLS = ['#fff3a0', '#ffd34d', '#ffb020', '#ffffff', '#ffe27a'];
+const goldOf = c => Object.assign({}, c, { gold: true });
+function rollPack() {
+  const cards = [drawCard(), drawCard(), drawCard()];
+  if (!S.gold) S.gold = {};
+  const gold = (S.goldPity || 0) >= GOLD_PITY || Math.random() < GOLD_CHANCE || !!window.__forceGold;
+  if (gold) {
+    const w = CARDS.map(c => S.gold[c.id] ? 1 : 3); let t = Math.random() * w.reduce((a, b) => a + b, 0), g = CARDS[0];
+    for (let i = 0; i < CARDS.length; i++) { t -= w[i]; if (t <= 0) { g = CARDS[i]; break; } }
+    const slot = rnd(3); cards[slot] = goldOf(g); S.gold[g.id] = (S.gold[g.id] || 0) + 1; S.goldPity = 0;
+  } else S.goldPity = (S.goldPity || 0) + 1;
+  S.packs -= 1; cards.forEach(c => { if (!c.gold) S.cards[c.id] = (S.cards[c.id] || 0) + 1; }); save();
+  return cards;
+}
+async function goldReveal(el, c) {
+  el.classList.remove('goldhint'); el.classList.add('charging');
+  const host = $('#s-pack'), veil = document.createElement('div'); veil.className = 'goldveil'; host.insertBefore(veil, host.firstChild);
+  Snd.roll(); say('Oh ! Quelque chose brille !');
+  await sleep(2000);
+  veil.className = 'goldveil flash'; Snd.goldCard(); await sleep(160);
+  el.classList.remove('charging'); el.classList.add('up', 'gold-glow');
+  el.insertAdjacentHTML('afterbegin', '<div class="rays" style="z-index:-1"></div>');
+  const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  Confetti.burst(cx, cy, 180, 1.5, GOLD_COLS); setTimeout(() => Confetti.burst(cx, cy, 110, 1.1, GOLD_COLS), 450); setTimeout(() => Confetti.rain(60), 700);
+  setTimeout(() => veil.remove(), 900);
+  await say(`Waouh ! Une carte dorée ! ${c.name} doré ! C'est incroyable !`);
 }
 function drawCard() {
   const r = Math.random(), rar = r < .025 ? 'o' : r < .22 ? 'r' : 'c';
@@ -1126,6 +1245,317 @@ async function countAlong(n) {
   say(NUM_SAY.slice(1, n + 1).join('... '), { rate: .8 });
   for (let i = 0; i < objs.length; i++) { objs[i].style.transform = 'scale(1.35)'; await sleep(780); objs[i].style.transform = 'scale(1)'; }
   await sleep(300);
+}
+
+
+/* ====================== Nouveaux exercices : lecture et calcul (PS / MS) ======================
+   Tout est jouable sans savoir lire : consigne dite à voix haute, images, gros boutons, aide douce. */
+const emo = e => `<span class="emo" aria-hidden="true">${e}</span>`;
+/* mot, article, image, syllabes (ou null), rime, lettre initiale (ou null) */
+const WORDS = [
+  ['lapin', 'le', '🐰', ['la', 'pin'], 'in', 'L'], ['pain', 'le', '🍞', ['pain'], 'in', 'P'], ['main', 'la', '✋', ['main'], 'in', 'M'],
+  ['raisin', 'le', '🍇', ['rai', 'sin'], 'in', 'R'], ['dauphin', 'le', '🐬', ['dau', 'phin'], 'in', 'D'], ['requin', 'le', '🦈', ['re', 'quin'], 'in', 'R'],
+  ['train', 'le', '🚂', ['train'], 'in', 'T'], ['chien', 'le', '🐶', ['chien'], 'in', null],
+  ['bateau', 'le', '⛵', ['ba', 'teau'], 'o', 'B'], ['gâteau', 'le', '🎂', ['gâ', 'teau'], 'o', 'G'], ['chapeau', 'le', '🎩', ['cha', 'peau'], 'o', null],
+  ['oiseau', "l'", '🐦', ['oi', 'seau'], 'o', 'O'], ['drapeau', 'le', '🏁', ['dra', 'peau'], 'o', 'D'], ['cadeau', 'le', '🎁', ['ca', 'deau'], 'o', 'C'], ['vélo', 'le', '🚲', ['vé', 'lo'], 'o', 'V'],
+  ['ballon', 'le', '🎈', ['bal', 'lon'], 'on', 'B'], ['maison', 'la', '🏠', ['mai', 'son'], 'on', 'M'], ['poisson', 'le', '🐟', ['pois', 'son'], 'on', 'P'],
+  ['camion', 'le', '🚚', ['ca', 'mion'], 'on', 'C'], ['citron', 'le', '🍋', null, 'on', null], ['mouton', 'le', '🐑', ['mou', 'ton'], 'on', 'M'],
+  ['papillon', 'le', '🦋', ['pa', 'pi', 'llon'], 'on', 'P'], ['avion', "l'", '✈️', null, 'on', 'A'], ['lion', 'le', '🦁', null, 'on', 'L'],
+  ['melon', 'le', '🍈', ['me', 'lon'], 'on', 'M'], ['bonbon', 'le', '🍬', ['bon', 'bon'], 'on', 'B'],
+  ['chat', 'le', '🐱', ['chat'], 'a', null], ['rat', 'le', '🐀', ['rat'], 'a', 'R'], ['chocolat', 'le', '🍫', ['cho', 'co', 'lat'], 'a', null], ['koala', 'le', '🐨', ['ko', 'a', 'la'], 'a', 'K'],
+  ['hibou', 'le', '🦉', ['hi', 'bou'], 'ou', null], ['kangourou', 'le', '🦘', ['kan', 'gou', 'rou'], 'ou', 'K'], ['bijou', 'le', '💍', ['bi', 'jou'], 'ou', 'B'],
+  ['chou', 'le', '🥬', ['chou'], 'ou', null], ['loup', 'le', '🐺', ['loup'], 'ou', 'L'],
+  ['soleil', 'le', '☀️', ['so', 'leil'], 'eil', 'S'], ['abeille', "l'", '🐝', null, 'eil', 'A'], ['oreille', "l'", '👂', null, 'eil', 'O'],
+  ['fleur', 'la', '🌸', ['fleur'], 'eur', 'F'], ['cœur', 'le', '❤️', ['cœur'], 'eur', null], ['tracteur', 'le', '🚜', ['trac', 'teur'], 'eur', 'T'],
+  ['souris', 'la', '🐭', ['sou', 'ris'], 'i', 'S'], ['fourmi', 'la', '🐜', ['four', 'mi'], 'i', 'F'], ['parapluie', 'le', '☂️', ['pa', 'ra', 'pluie'], 'i', 'P'], ['lit', 'le', '🛏️', ['lit'], 'i', 'L'],
+  ['canard', 'le', '🦆', ['ca', 'nard'], 'ar', 'C'], ['renard', 'le', '🦊', ['re', 'nard'], 'ar', 'R'],
+  ['bébé', 'le', '👶', ['bé', 'bé'], 'e', 'B'], ['fusée', 'la', '🚀', ['fu', 'sée'], 'e', 'F'], ['clé', 'la', '🔑', ['clé'], 'e', null],
+  ['éléphant', "l'", '🐘', ['é', 'lé', 'phant'], null, 'E'], ['ananas', "l'", '🍍', ['a', 'na', 'nas'], null, 'A'], ['tortue', 'la', '🐢', ['tor', 'tue'], null, 'T'],
+  ['cheval', 'le', '🐴', ['che', 'val'], null, null], ['ours', "l'", '🐻', ['ours'], null, 'O'], ['roi', 'le', '👑', ['roi'], null, 'R'], ['serpent', 'le', '🐍', ['ser', 'pent'], null, 'S'],
+  ['vache', 'la', '🐄', null, null, 'V'], ['zèbre', 'le', '🦓', null, null, 'Z'], ['lune', 'la', '🌙', null, null, 'L'], ['fraise', 'la', '🍓', null, null, 'F'],
+  ['pomme', 'la', '🍎', null, null, 'P'], ['tomate', 'la', '🍅', null, null, 'T'], ['carotte', 'la', '🥕', null, null, 'C'], ['nuage', 'le', '☁️', null, null, 'N'], ['robe', 'la', '👗', null, null, 'R'],
+].map(([w, a, e, s, r, i]) => ({ w, a, e, s, r, i }));
+const wArt = w => (w.a === "l'" ? "l'" : w.a + ' ') + w.w;
+const cols6 = () => shuffle(['#e8433a', '#3a7be8', '#3cb84a', '#9050d8', '#ff8c1a', '#e0529a']);
+const numOpts = (t, n, lo, hi) => {
+  const pool = []; for (let i = lo; i <= hi; i++) if (i !== t) pool.push(i);
+  pool.sort((a, b) => Math.abs(a - t) - Math.abs(b - t) + (Math.random() - .5) * 1.6);
+  return shuffle([t, ...pool.slice(0, n - 1)]);
+};
+const numChoice = (opts, t) => { const c = cols6(); return opts.map((v, i) => ({ ok: v === t, html: `<span class="glyph" style="color:${c[i]}">${v}</span>` })); };
+const crtImg = c => creatureSVG(c.sp, { lazy: true, still: true });
+function groupGridSVG(n, obj) {
+  const per = 5, rows = n > 5 ? 2 : 1, pts = [];
+  for (let i = 0; i < n; i++) { const r = Math.floor(i / per), c = i % per, inRow = r === 0 ? Math.min(n, per) : n - per; pts.push([50 + (c - (inRow - 1) / 2) * 19 + rnd(3) - 1, rows === 1 ? 50 : 32 + r * 36 + rnd(3) - 1]); }
+  return `<svg viewBox="0 ${rows === 1 ? 26 : 10} 100 ${rows === 1 ? 48 : 80}">${pts.map(([x, y], i) => `<g class="obj" data-i="${i}" style="transform-origin:${x}px ${y}px;transition:transform .25s">${OBJ[obj].svg(x, y, .54)}</g>`).join('')}</svg>`;
+}
+function tenFrameSVG(n, col = '#e8433a') {
+  let h = '<svg viewBox="0 0 100 52"><rect x="3" y="3" width="94" height="46" rx="6" fill="#fff" stroke="#2d2350" stroke-width="3"/>';
+  for (let i = 0; i < 10; i++) { const x = 13 + (i % 5) * 18.5, y = 14 + Math.floor(i / 5) * 24; h += `<rect x="${x - 8}" y="${y - 8}" width="16" height="16" rx="3" fill="none" stroke="rgba(45,35,80,.2)" stroke-width="1.5"/>`; if (i < n) h += `<circle cx="${x}" cy="${y}" r="6.5" fill="${col}" stroke="#2d2350" stroke-width="1.6"/>`; }
+  return h + '</svg>';
+}
+const dotsSVG = (n, col) => `<svg viewBox="0 0 100 100">${DICE[n].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="11" fill="${col}" stroke="#2d2350" stroke-width="3"/><circle cx="${x - 3.5}" cy="${y - 3.5}" r="3" fill="#fff" opacity=".7"/>`).join('')}</svg>`;
+const drumSVG = col => `<svg viewBox="0 0 48 44"><path d="M6 14v20c0 5 8 8 18 8s18-3 18-8V14Z" fill="${col}" stroke="#2d2350" stroke-width="2.5"/><ellipse cx="24" cy="14" rx="18" ry="7" fill="#fff4d6" stroke="#2d2350" stroke-width="2.5"/><path d="M12 20l6 18M24 22v20M36 20l-6 18" stroke="#2d2350" stroke-width="1.6" opacity=".5"/><path d="M4 4l14 8M44 4L30 12" stroke="#8a5a2b" stroke-width="3.5" stroke-linecap="round"/></svg>`;
+const drumsHTML = n => `<div class="drums">${Array.from({ length: n }, (_, i) => drumSVG(['#e8433a', '#3a7be8', '#3cb84a'][i % 3])).join('')}</div>`;
+
+Object.assign(GEN, {
+  /* Lecture : même lettre en grand et en petit */
+  minmaj(L) {
+    const easy = 'AEIOUMSLPRT'.split(''), all = 'ABCDEFGHIJKLMNOPQRSTUVZ'.split('');
+    const t = pick(L === 1 ? 'AEIOUMSL'.split('') : L === 2 ? easy : all), n = L >= 3 ? 4 : L === 2 ? 3 : 2;
+    const confus = { B: 'D', D: 'B', P: 'Q', Q: 'P', N: 'U', U: 'N', M: 'W' };
+    let others = shuffle((L === 1 ? easy : all).filter(x => x !== t));
+    if (L >= 3 && confus[t]) others = [confus[t], ...others.filter(x => x !== confus[t])];
+    const opts = shuffle([t, ...others.slice(0, n - 1)]), c = cols6();
+    return {
+      key: 'mm' + t, say: `Voici la grande lettre ${LETTER_SAY[t]}. Touche la petite lettre pareille.`,
+      prompt: `<div class="panel"><span class="bignum" style="color:#8b6cf0">${t}</span></div>`,
+      choices: opts.map((v, i) => ({ ok: v === t, html: `<span class="glyph" style="color:${c[i]}">${v.toLowerCase()}</span>` })),
+      okSay: `Oui ! La grande ${LETTER_SAY[t]} et la petite ${LETTER_SAY[t]}, c'est la même lettre !`,
+      hint: async () => { await say(`Regarde bien la forme. Cherche la petite ${LETTER_SAY[t]}.`); },
+    };
+  },
+  /* Lecture : première lettre d'un mot illustré */
+  debut(L) {
+    const pool = WORDS.filter(x => x.i), t = pick(pool), n = L >= 3 ? 4 : L === 2 ? 3 : 2;
+    const letters = [...new Set(pool.map(x => x.i))].filter(x => x !== t.i), confus = { B: 'D', D: 'B', P: 'B', M: 'N', V: 'F', F: 'V', T: 'D', C: 'G', G: 'C', L: 'I', R: 'P' };
+    let others = shuffle(letters); if (L >= 3 && confus[t.i] && letters.includes(confus[t.i])) others = [confus[t.i], ...others.filter(x => x !== confus[t.i])];
+    const opts = shuffle([t.i, ...others.slice(0, n - 1)]), c = cols6(), W = t.w.toUpperCase();
+    return {
+      key: 'd' + t.w, say: `Par quelle lettre commence ${wArt(t)} ? Touche la bonne lettre.`,
+      prompt: `<div class="panel wordcard">${emo(t.e)}<div class="wd"><b>${W[0]}</b>${W.slice(1)}</div></div>`,
+      choices: opts.map((v, i) => ({ ok: v === t.i, html: `<span class="glyph" style="color:${c[i]}">${v}</span>` })),
+      okSay: `Oui ! ${wArt(t)} commence par la lettre ${LETTER_SAY[t.i]} !`,
+      hint: async () => { await say(`Écoute bien le début : ${t.w}. ${t.w}. Ça commence par ${LETTER_SAY[t.i]}.`); },
+    };
+  },
+  /* Lecture : compter les syllabes avec des tambours */
+  syllabes(L) {
+    const pool = WORDS.filter(x => x.s && (L === 1 ? x.s.length <= 2 : true)), t = pick(pool), k = t.s.length;
+    const opts = L === 1 ? [1, 2] : [1, 2, 3];
+    return {
+      key: 'sy' + t.w, say: `${wArt(t)}. Combien de syllabes ? Écoute.`, cols: opts.length,
+      prompt: `<div class="panel wordcard" id="wdcard">${emo(t.e)}</div>`,
+      choices: opts.map(v => ({ ok: v === k, html: drumsHTML(v) })),
+      okSay: `Oui ! ${t.s.join('... ')}. ${NUM_SAY[k]} ${k > 1 ? 'syllabes' : 'syllabe'} !`,
+      intro: async () => {
+        for (let i = 0; i < t.s.length; i++) {
+          const w = $('#wdcard'); if (!w) return;
+          const r = await say(t.s[i], { rate: .7 }); if (!r) return;
+          w.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 350 }); Snd.tap();
+        }
+        await say(`Touche les tambours : combien en faut-il ?`);
+      },
+      hint: async () => {
+        const dr = $$('.choice', $('#stage'));
+        for (let i = 0; i < t.s.length; i++) { const r = await say(t.s[i], { rate: .65 }); if (!r) return; const w = $('#wdcard'); if (w) w.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 350 }); Snd.tap(); }
+      },
+    };
+  },
+  /* Lecture : rimes */
+  rimes(L) {
+    const rimed = WORDS.filter(x => x.r && WORDS.filter(y => y.r === x.r).length >= 2), t = pick(rimed);
+    const ans = pick(WORDS.filter(y => y.r === t.r && y.w !== t.w));
+    const n = L >= 2 ? 3 : 2, others = shuffle(WORDS.filter(y => y.r && y.r !== t.r)), seen = new Set(), dis = [];
+    for (const o of others) { if (!seen.has(o.r)) { seen.add(o.r); dis.push(o); } if (dis.length === n - 1) break; }
+    const opts = shuffle([ans, ...dis]);
+    return {
+      key: 'ri' + t.w, say: `Quelle image rime avec ${wArt(t)} ? ${opts.map(wArt).join(', ou ')} ?`,
+      prompt: `<div class="panel wordcard">${emo(t.e)}</div>`,
+      choices: opts.map(o => ({ ok: o === ans, html: emo(o.e) })),
+      okSay: `Oui ! ${t.w} et ${ans.w}, ça rime !`,
+      hint: async () => { await say(`Écoute : ${t.w}, ${ans.w}. Ça fait la même musique à la fin !`); },
+    };
+  },
+  /* Lecture : trouver l'identique (images, formes, puis lettres) */
+  identique(L) {
+    const n = L === 1 ? 2 : 3;
+    if (L === 1) {
+      const [a, b] = shuffle(CARDS.filter(c => c.rar !== 'o')).slice(0, 2), opts = shuffle([a, b]);
+      return { key: 'id' + a.id, say: 'Trouve celui qui est exactement pareil que celui du haut.', prompt: `<div class="panel" style="width:min(36vw,150px)">${crtImg(a)}</div>`, choices: opts.map(o => ({ ok: o === a, html: crtImg(o) })), okSay: `Oui ! C'est le même, c'est ${a.name} !` };
+    }
+    if (L === 2) {
+      const ks = ['rond', 'carre', 'triangle'], cs = ['rouge', 'bleu', 'jaune', 'vert'];
+      const k = pick(ks), c = pick(cs), k2 = pick(ks.filter(x => x !== k)), c2 = pick(cs.filter(x => x !== c));
+      const opts = shuffle([{ k, c, ok: 1 }, { k, c: c2 }, { k: k2, c }]);
+      return { key: 'ix' + k + c, say: 'Trouve celui qui est exactement pareil : même forme, même couleur.', prompt: `<div class="panel" style="width:min(32vw,130px)">${shapeSVG(k, COLORS[c])}</div>`, choices: opts.map(o => ({ ok: !!o.ok, html: shapeSVG(o.k, COLORS[o.c]) })), okSay: 'Oui ! Il est exactement pareil !' };
+    }
+    const abc = 'ABDEILMOPRSTU'.split(''), seq = shuffle(abc).slice(0, 3), str = a => a.join('');
+    const mk = i => { const a = seq.slice(); a[i] = pick(abc.filter(x => x !== seq[i])); return a; };
+    const opts = shuffle([{ s: seq, ok: 1 }, { s: mk(0) }, { s: mk(2) }]);
+    return { key: 'it' + str(seq), say: 'Trouve les lettres exactement pareilles, dans le même ordre.', prompt: `<div class="panel"><span class="txtfig">${str(seq)}</span></div>`, choices: opts.map(o => ({ ok: !!o.ok, html: `<span class="txtfig">${str(o.s)}</span>` })), okSay: `Oui ! ${seq.map(x => LETTER_SAY[x]).join(', ')} : c'est pareil !`, hint: async () => { await say(`Regarde les lettres une par une : ${seq.map(x => LETTER_SAY[x]).join(', ')}.`); } };
+  },
+  /* Calcul : dénombrer jusqu'à 10 */
+  compter10(L) {
+    const obj = pick(Object.keys(OBJ)), t = L === 1 ? 3 + rnd(4) : L === 2 ? 4 + rnd(5) : 6 + rnd(5);
+    const grid = L === 3 || t > 8, svg = grid ? groupGridSVG(t, obj) : groupSVG(t, obj, true);
+    return {
+      key: 'c10' + t + obj, say: `Compte les ${OBJ[obj].pl}. Combien y en a-t-il ?`,
+      prompt: `<div class="panel" style="width:min(64vw,${grid ? 270 : 250}px)" id="qgroup">${svg}</div>`,
+      choices: numChoice(numOpts(t, L === 1 ? 3 : 4, 1, 10), t),
+      okSay: `${NUM_SAY.slice(1, t + 1).join(', ')}. Il y a ${qty(t, obj)} !`,
+      hint: async () => { await countAlong(t); },
+    };
+  },
+  /* Calcul : relier un chiffre à une quantité */
+  quantite(L) {
+    const max = L === 1 ? 5 : L === 2 ? 6 : 10, t = 1 + rnd(max), n = L === 1 ? 2 : L === 2 ? 3 : 4;
+    const opts = numOpts(t, n, 1, max), col = pick(['#e8433a', '#3a7be8', '#3cb84a', '#9050d8']), obj = pick(Object.keys(OBJ));
+    const draw = v => L === 1 ? dotsSVG(v, col) : L === 2 ? groupSVG(v, obj, true) : tenFrameSVG(v, col);
+    return {
+      key: 'qt' + t + L, say: `Voici le chiffre ${NUM_SAY[t]}. Touche l'image où il y en a ${NUM_SAY[t]}.`,
+      prompt: `<div class="panel"><span class="bignum" style="color:${col}">${t}</span></div>`,
+      choices: opts.map(v => ({ ok: v === t, html: draw(v) })),
+      okSay: `Oui ! Le chiffre ${NUM_SAY[t]}, c'est ${NUM_SAY[t]} !`,
+      hint: async () => { await say(`Cherche l'image avec ${NUM_SAY[t]}. Compte doucement : ${NUM_SAY.slice(1, t + 1).join(', ')}.`); },
+    };
+  },
+  /* Calcul : plus, moins, autant */
+  plusmoins(L) {
+    const obj = pick(Object.keys(OBJ));
+    if (L === 3 && Math.random() < .4) {
+      const n = 3 + rnd(4), opts = shuffle([n, n - 1, n + 1 + rnd(2)]);
+      return {
+        key: 'au' + n + obj, say: `Touche le groupe où il y a autant de ${OBJ[obj].pl} que dans le groupe du haut.`,
+        prompt: `<div class="panel" style="width:min(44vw,170px)">${groupSVG(n, obj, true)}</div>`,
+        choices: opts.map(v => ({ ok: v === n, html: groupSVG(v, obj, true) })),
+        okSay: `Oui ! ${qty(n, obj)}, il y en a autant !`,
+        hint: async () => { await say(`Compte : en haut, ${NUM_SAY[n]}. Cherche aussi ${NUM_SAY[n]}.`); },
+      };
+    }
+    const lim = L === 1 ? 5 : L === 2 ? 6 : 9, gap = L === 3 ? 1 : 2, more = L === 1 ? true : Math.random() < .5;
+    let a, b; do { a = 1 + rnd(lim); b = 1 + rnd(lim); } while (Math.abs(a - b) < gap);
+    const scat = L >= 3, A = groupSVG(a, obj, scat), B = groupSVG(b, obj, scat);
+    const win = more ? Math.max(a, b) : Math.min(a, b);
+    return {
+      key: 'pm' + a + b + more, say: more ? `Où y a-t-il le plus de ${OBJ[obj].pl} ? Touche le groupe.` : `Où y a-t-il le moins de ${OBJ[obj].pl} ? Touche le groupe.`,
+      choices: [{ ok: a === win, html: A }, { ok: b === win, html: B }],
+      okSay: more ? `Oui ! ${qty(win, obj)}, c'est plus !` : `Oui ! ${qty(win, obj)}, c'est moins !`,
+      hint: async () => { await say(`Compte avec moi. Ici, ${NUM_SAY[a]}. Là, ${NUM_SAY[b]}.`); },
+    };
+  },
+  /* Calcul : un de plus / un de moins */
+  plusun(L) {
+    const obj = pick(Object.keys(OBJ)), sub = L === 3 && Math.random() < .4;
+    const n = L === 1 ? 1 + rnd(3) : L === 2 ? 2 + rnd(4) : 3 + rnd(7), t = sub ? n - 1 : n + 1;
+    const per = n <= 4 ? n : 5, rows = Math.ceil(n / per), sp = Math.min(24, 118 / per), sc = n <= 4 ? .8 : .66;
+    let g = ''; for (let i = 0; i < n; i++) {
+      const x = 8 + sp / 2 + (i % per) * sp, y = rows === 1 ? 50 : 32 + Math.floor(i / per) * 36, gone = sub && i === n - 1;
+      g += `<g class="obj${gone ? '' : ''}" data-i="${i}" style="transform-origin:${x}px ${y}px;transition:transform .25s;${gone ? 'opacity:.35' : ''}">${OBJ[obj].svg(x, y, sc)}</g>${gone ? `<path d="M${x - 14} ${y - 14} l28 28 M${x + 14} ${y - 14} l-28 28" stroke="#e8433a" stroke-width="5" stroke-linecap="round"/>` : ''}`;
+    }
+    if (!sub) g += `<text x="142" y="62" font-size="40" font-weight="700" text-anchor="middle" fill="#8b6cf0" font-family="Fredoka,sans-serif">+</text><g class="obj arrive" style="transform-origin:174px 50px">${OBJ[obj].svg(174, 50, .8)}</g>`;
+    const opts = numOpts(t, L === 1 ? 2 : 3, 1, 10);
+    return {
+      key: 'pu' + n + sub + obj, say: sub ? `Il y a ${qty(n, obj)}. ${cap(OBJ[obj].one)} s'en va ! Combien en reste-t-il ?` : `Il y a ${qty(n, obj)}. ${cap(OBJ[obj].one)} arrive ! Combien y en a-t-il maintenant ?`,
+      prompt: `<div class="panel" style="width:min(86vw,360px)" id="qgroup"><svg viewBox="0 0 200 100">${g}</svg></div>`,
+      choices: numChoice(opts, t),
+      okSay: sub ? `${NUM_SAY[n]}, moins un, il en reste ${NUM_SAY[t]} !` : `${NUM_SAY[n]} et encore un, ça fait ${NUM_SAY[t]} !`,
+      hint: async () => { if (sub) await say(`On en enlève un. Il en reste... compte avec moi.`); else await countAlong(t); },
+    };
+  },
+  /* Calcul : voir vite (dés flashés) */
+  subitizing(L) {
+    const t = 1 + rnd(L === 1 ? 3 : L === 2 ? 5 : 6), col = pick(['#e8433a', '#3a7be8', '#3cb84a', '#9050d8', '#ff8c1a']), hold = L === 1 ? 2000 : L === 2 ? 1500 : 1100;
+    return {
+      key: 'su' + t + col, say: 'Regarde vite ! Combien de points ? Touche le bon chiffre.',
+      prompt: `<div class="panel" style="width:min(52vw,210px);aspect-ratio:1;position:relative"><div id="dotsA" style="display:none">${dotsSVG(t, col)}</div><div class="cover" id="dotsQ" role="button" aria-label="Voir encore">?</div></div>`,
+      choices: numChoice(numOpts(t, L === 1 ? 2 : 3, 1, L === 1 ? 4 : 6), t),
+      okSay: `${NUM_SAY.slice(1, t + 1).join(', ')}. Il y avait ${NUM_SAY[t]} points !`,
+      intro: async () => {
+        const A = $('#dotsA'), Q = $('#dotsQ'); if (!A || !Q) return;
+        const flash = async () => { Q.style.display = 'none'; A.style.display = 'block'; Snd.tap(); await sleep(hold); if ($('#dotsA')) { A.style.display = 'none'; Q.style.display = 'flex'; } };
+        Q.onclick = flash; await sleep(300); await flash();
+      },
+      hint: async () => { const A = $('#dotsA'), Q = $('#dotsQ'); if (A && Q) { A.style.display = 'block'; Q.style.display = 'none'; } await say(`Regarde bien : ${NUM_SAY.slice(1, t + 1).join(', ')}.`); },
+    };
+  },
+  /* Calcul : suite des chiffres */
+  suitenum(L) {
+    const max = L === 1 ? 5 : 10, blank = L === 1 ? 3 : L === 2 ? (Math.random() < .5 ? 3 : 0) : 1 + rnd(2);
+    let start = 1 + rnd(max - 3); if (blank === 0 && start < 2) start = 2; if (start + 3 > max) start = max - 3;
+    const seq = [0, 1, 2, 3].map(i => start + i), t = seq[blank], c = cols6();
+    const say_ = blank === 3 ? `Les chiffres se suivent : ${seq.slice(0, 3).map(v => NUM_SAY[v]).join(', ')}. Quel chiffre vient après ?` : blank === 0 ? `Quel chiffre vient juste avant le ${NUM_SAY[seq[1]]} ?` : `Les chiffres se suivent. Quel chiffre manque entre le ${NUM_SAY[seq[blank - 1]]} et le ${NUM_SAY[seq[blank + 1]]} ?`;
+    return {
+      key: 'sn' + start + blank, say: say_,
+      prompt: `<div class="panel numrow" id="qnum">${seq.map((v, i) => i === blank ? `<div class="q" id="qslot">?</div>` : `<div style="color:${c[i]}">${v}</div>`).join('')}</div>`,
+      choices: numChoice(numOpts(t, L === 1 ? 2 : 3, 1, max), t),
+      okSay: `Oui ! ${seq.map(v => NUM_SAY[v]).join(', ')} !`,
+      onOk: () => { const q = $('#qslot'); if (q) { q.className = ''; q.style.color = '#3cb84a'; q.textContent = t; } },
+    };
+  },
+  /* Calcul : ranger dans l'ordre (du plus petit au plus grand, ou 1-2-3...) */
+  ranger(L) {
+    const bySize = L === 1 ? Math.random() < .6 : Math.random() < .5;
+    if (bySize) {
+      const n = L === 3 ? 4 : 3, sizes = n === 3 ? [.5, .75, 1] : [.48, .65, .82, 1], desc = L === 3 && Math.random() < .5, useCrt = Math.random() < .5, col = COLORS[pick(['rouge', 'bleu', 'vert', 'violet', 'orange'])];
+      const items = shuffle(sizes.map((sz, i) => ({
+        rank: desc ? n - 1 - i : i,
+        html: useCrt ? `<svg viewBox="0 0 200 200"><g transform="translate(100 190) scale(${sz}) translate(-100 -190)">${creatureSVG(myForm().sp, { attrs: 'x="0" y="0" width="200" height="200"', still: true })}</g></svg>` : balloonSVG(col, sz),
+      })));
+      const first = desc ? 'le plus grand' : 'le plus petit', last = desc ? 'le plus petit' : 'le plus grand';
+      return {
+        special: 'order', key: 'rg' + n + desc + useCrt, items, cols: n, grid: '',
+        say: `Range-les ${desc ? 'du plus grand au plus petit' : 'du plus petit au plus grand'}. Touche d'abord ${first}.`,
+        steps: Array.from({ length: n }, (_, i) => i === 0 ? `Touche ${first}.` : i === n - 1 ? `Et enfin, ${last} !` : 'Et maintenant, le suivant !'),
+        okSay: desc ? 'Bravo ! Du plus grand au plus petit !' : 'Bravo ! Du plus petit au plus grand !',
+      };
+    }
+    const n = L === 1 ? 3 : L === 2 ? 4 : 5, st = L === 3 ? 1 + rnd(3) : 1, vals = Array.from({ length: n }, (_, i) => st + i), c = cols6();
+    const items = shuffle(vals.map((v, i) => ({ rank: i, v, html: `<span class="glyph" style="color:${c[i]}">${v}</span>` })));
+    return {
+      special: 'order', key: 'rn' + n + st, items, cols: n === 4 ? 2 : 3,
+      say: `Touche les chiffres dans l'ordre. Commence par le ${NUM_SAY[st]}.`,
+      steps: vals.map(v => `Touche le ${NUM_SAY[v]}.`),
+      okSay: `Bravo ! ${vals.map(v => NUM_SAY[v]).join(', ')} !`,
+    };
+  },
+  /* Suites d'images (motifs AB, AAB, ABC) */
+  motifs(L) {
+    const pool = shuffle([...Object.keys(OBJ).map(k => ({ id: 'o' + k, nm: OBJ[k].one, html: `<svg viewBox="0 0 100 100">${OBJ[k].svg(50, 50, 2)}</svg>` })),
+      ...shuffle(CARDS.filter(c => c.rar !== 'o')).slice(0, 3).map(c => ({ id: c.id, nm: c.name, html: crtImg(c) }))]);
+    let unit;
+    if (L === 1) unit = [pool[0], pool[1]]; else if (L === 2) unit = Math.random() < .5 ? [pool[0], pool[0], pool[1]] : [pool[0], pool[1]];
+    else unit = Math.random() < .5 ? [pool[0], pool[1], pool[2]] : [pool[0], pool[1], pool[1]];
+    const len = unit.length === 2 ? 5 : 6, seq = []; for (let i = 0; i < len; i++) seq.push(unit[i % unit.length]);
+    const ans = unit[len % unit.length], cand = []; unit.forEach(u => { if (!cand.includes(u)) cand.push(u); });
+    if (L > 1 && cand.length < 3) cand.push(pool.find(x => !cand.includes(x)));
+    const opts = shuffle(cand.slice(0, L === 1 ? 2 : 3)), cell = it => `<div style="width:15%;aspect-ratio:1">${it.html}</div>`;
+    return {
+      key: 'mo' + unit.map(u => u.id).join(''), say: `Regarde la suite : ${seq.map(x => x.nm).join(', ')}... Qu'est-ce qui vient après ? Touche-le.`,
+      prompt: `<div class="panel" id="suite" style="width:100%;display:flex;gap:2%;align-items:center;justify-content:center">${seq.map(cell).join('')}<div id="qslot" style="width:15%;aspect-ratio:1;border:4px dashed #8b6cf0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#8b6cf0;font-weight:700">?</div></div>`,
+      choices: opts.map(it => ({ ok: it === ans, html: it.html })),
+      okSay: 'Oui ! La suite continue !',
+      onOk: () => { const sl = $('#qslot'); if (sl) { sl.style.border = '0'; sl.innerHTML = ans.html; } },
+    };
+  },
+});
+function cap(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
+
+/* Exercice « ranger » : toucher les éléments dans le bon ordre */
+function runOrder(q, stage) {
+  return new Promise(resolve => {
+    Game.curResolve = resolve; window.__q = q;
+    const n = q.items.length;
+    stage.innerHTML = `<div class="prompt">${q.prompt || ''}</div><div class="choices c${q.cols || 3}" style="${q.grid || ''}">${q.items.map((c, i) => `<button class="choice" data-i="${i}" aria-label="élément ${i + 1}">${c.html}</button>`).join('')}</div>`;
+    let next = 0, tries = 0, miss = 0, done = false; const btns = $$('.choice', stage);
+    say(q.say);
+    btns.forEach(b => b.onclick = async () => {
+      if (done || b.classList.contains('taken')) return;
+      const c = q.items[+b.dataset.i];
+      if (c.rank === next) {
+        btns.forEach(o => o.classList.remove('shine')); b.classList.add('right', 'taken'); b.insertAdjacentHTML('beforeend', `<span class="badge">${next + 1}</span>`);
+        next++; miss = 0;
+        if (next < n) { Snd.tap(); say(q.steps[next]); return; }
+        done = true; Snd.good(); const r = b.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 2, 45);
+        mascotCheer(); Battle.attack(tries === 0);
+        await say((tries ? '' : pick(PRAISE) + ' ') + q.okSay);
+        Game.curResolve = null; resolve({ first: tries === 0 }); return;
+      }
+      tries++; miss++; Snd.soft(); Battle.taunt(); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); setTimeout(() => b.classList.remove('nope'), 500);
+      if (miss === 1) say(pick(TRYAGAIN) + ' ' + q.steps[next]);
+      else { btns.forEach((o, i) => { if (q.items[i].rank === next) o.classList.add('shine'); }); say('Regarde, c\'est celui qui brille ! Touche-le.'); }
+    });
+  });
 }
 
 /* ====================== Tracé des formes ======================
@@ -1447,7 +1877,7 @@ function makeQuestion(type) {
   if (type === 'trace') return traceQuestion(L, Game.recent);
   let q;
   for (let k = 0; k < 14; k++) { q = GEN[type](L); if (!Game.recent.includes(q.key)) break; }
-  return q;
+  q.type = type; return q;
 }
 function mascotCheer() {
   const m = $('#mascot'); if (!m) return; const svg = m.firstElementChild; svg.classList.add('happy');
@@ -1473,7 +1903,7 @@ async function startSession() {
     say('Tu veux arrêter ? Touche encore la maison.');
   };
   let current = null;
-  $('#bSay').onclick = () => { if (current) say(current.special ? (current.lastSay || '') : current.say); };
+  $('#bSay').onclick = () => { if (current) say(current.special === 'trace' ? (current.lastSay || '') : current.say); };
   let gained = 0;
   if (resume) await say('On reprend la partie là où on s\'était arrêté !');
   for (let i = i0; i < plan.length; i++) {
@@ -1484,6 +1914,7 @@ async function startSession() {
     const stage = $('#stage');
     let r;
     if (q.special === 'trace') { r = await runTrace(q, stage, lvl('trace').l); }
+    else if (q.special === 'order') r = await runOrder(q, stage);
     else r = await runChoice(q, stage);
     if (gone()) return;
     if (q.special === 'trace') await Battle.attack(r.first);
@@ -1518,7 +1949,7 @@ function runChoice(q, stage) {
     stage.innerHTML = `<div class="prompt">${q.prompt || ''}</div><div class="choices c${cols === 1 ? '1' : cols}" style="${cols === 1 ? 'grid-template-columns:1fr;max-width:340px' : ''}">${q.choices.map((c, i) => `<button class="choice" data-i="${i}" aria-label="choix ${i + 1}">${c.html}</button>`).join('')}</div>`;
     if (cols === 1) $$('.choice', stage).forEach(b => { b.style.aspectRatio = '3.2'; });
     let tries = 0, done = false;
-    say(q.say);
+    say(q.say).then(ok => { if (ok && !done && q.intro) q.intro(); });
     $$('.choice', stage).forEach(b => b.onclick = async () => {
       if (done) return;
       const c = q.choices[+b.dataset.i];
@@ -1712,22 +2143,26 @@ function screenPack() {
   $('#pack').onclick = async () => {
     if (opened) return; opened = true;
     const p = $('#pack'); p.classList.remove('wiggle'); p.classList.add('shake'); Snd.whoosh();
-    const cards = [drawCard(), drawCard(), drawCard()];
-    S.packs -= 1; cards.forEach(c => S.cards[c.id] = (S.cards[c.id] || 0) + 1); save();
-    await sleep(1000); p.classList.add('burst'); Snd.sparkle(); Confetti.burst(null, innerHeight / 2.3, 60);
+    const cards = rollPack(), hasGold = cards.some(c => c.gold);
+    if (hasGold) { p.classList.remove('shake'); p.classList.add('goldpack'); Snd.rise(1.8); say('Oh ! Ce paquet brille très fort !'); await sleep(1900); Confetti.burst(null, innerHeight / 2.3, 90, 1.1, GOLD_COLS); p.classList.remove('goldpack'); }
+    else await sleep(1000);
+    p.classList.add('burst'); Snd.sparkle(); Confetti.burst(null, innerHeight / 2.3, 60);
     await sleep(500);
     const st = $('#pstage');
     st.innerHTML = `<div class="packcards">${cards.map(c => cardHTML(c, { anim: true })).join('')}</div>`;
     say('Touche les cartes pour les retourner !');
     let flipped = 0;
-    $$('.packcards .card', st).forEach((el, i) => el.onclick = async () => {
+    $$('.packcards .card', st).forEach((el, i) => { if (cards[i].gold) el.classList.add('goldhint'); el.onclick = async () => {
+      if (el.classList.contains('charging')) return;
       if (el.classList.contains('up')) { zoomCard(cards[i]); return; }
-      el.classList.add('up'); flipped++;
       const c = cards[i];
-      if (c.rar === 'o') {
+      if (c.gold) { await goldReveal(el, c); flipped++; }
+      else { el.classList.add('up'); flipped++; }
+      if (c.gold) { }
+      else if (c.rar === 'o') {
         Snd.gold(); el.classList.add('gold-glow'); const r = el.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 2, 120, 1.2);
         el.insertAdjacentHTML('afterbegin', '<div class="rays" style="z-index:-1"></div>');
-        await say(`Waouh ! Une carte en or ! ${c.name} ! C'est incroyable !`);
+        await say(`Waouh ! Une carte légendaire ! ${c.name} ! C'est incroyable !`);
       } else if (c.rar === 'r') { Snd.sparkle(); setTimeout(() => Snd.sparkle(), 200); await say(`Une carte rare ! ${c.name} !`); }
       else { Snd.sparkle(); await say(c.name + ' !'); }
       if (flipped === 3) {
@@ -1736,7 +2171,7 @@ function screenPack() {
         $('#pOk').onclick = () => { Snd.tap(); screenHome(false); };
         if ($('#pMore')) $('#pMore').onclick = () => { Snd.tap(); screenPack(); };
       }
-    });
+    }; });
   };
 }
 function packSVG() {
@@ -1753,15 +2188,17 @@ function packSVG() {
 /* ---------- Collection ---------- */
 function screenCards() {
   const s = $('#s-cards'); show('s-cards');
-  const owned = CARDS.filter(c => S.cards[c.id]).length;
+  const owned = CARDS.filter(c => S.cards[c.id]).length, golds = CARDS.filter(c => (S.gold || {})[c.id]), goldN = golds.reduce((a, c) => a + S.gold[c.id], 0);
   s.innerHTML = `<div class="topbar"><button class="big round" id="bHome4" aria-label="Accueil">${IC.home}</button>
-    <div class="mid" style="font-size:22px;font-weight:700;align-items:center">${IC.star().replace('<svg', '<svg style="width:28px"')} ${owned} / ${CARDS.length}</div>${musicBtn()}</div>
+    <div class="mid" style="font-size:22px;font-weight:700;align-items:center">${IC.star().replace('<svg', '<svg style="width:28px"')} ${owned} / ${CARDS.length}<span class="gtag" aria-label="${goldN} cartes dorées">${IC.goldstar} ${goldN}</span></div>${musicBtn()}</div>
     ${owned < 3 ? `<div class="empty-msg">Termine une partie pour gagner un paquet de 3 cartes ! Les ombres sont les créatures à découvrir.</div>` : ''}
-    <div class="scroll"><div class="cardgrid">${CARDS.map(c => S.cards[c.id] ? cardHTML(c, { up: true, count: S.cards[c.id] }) : `<div class="slot" role="img" aria-label="Carte à découvrir">${creatureSVG(c.sp, { lazy: true, still: true, noShadow: true, noFx: true, attrs: 'style="filter:brightness(0)"' })}</div>`).join('')}</div></div>`;
+    <div class="scroll"><div class="cardgrid">${CARDS.map(c => S.cards[c.id] ? cardHTML(c, { up: true, count: S.cards[c.id], gbadge: !!(S.gold || {})[c.id] }) : `<div class="slot" role="img" aria-label="Carte à découvrir">${creatureSVG(c.sp, { lazy: true, still: true, noShadow: true, noFx: true, attrs: 'style="filter:brightness(0)"' })}</div>`).join('')}</div>
+      <div class="gsec">${IC.goldstar} Cartes dorées</div>
+      <div class="cardgrid" id="goldgrid">${golds.length ? golds.map(c => cardHTML(goldOf(c), { up: true, count: S.gold[c.id] })).join('') : '<div class="slot goldslot">Une carte dorée peut se cacher dans un paquet !</div>'}</div></div>`;
   bindMusic(s);
   $('#bHome4').onclick = () => { Snd.tap(); screenHome(false); };
-  $$('.cardgrid .card', s).forEach(el => el.onclick = () => zoomCard(cardById(el.dataset.id)));
-  say(owned < 3 ? 'Voici tes cartes ! Joue pour en gagner d\'autres !' : `Tu as ${owned} cartes ! Touche une carte pour la voir en grand.`);
+  $$('.cardgrid .card', s).forEach(el => el.onclick = () => zoomCard(el.dataset.gold ? goldOf(cardById(el.dataset.id)) : cardById(el.dataset.id)));
+  say(goldN ? `Tu as ${goldN} carte${goldN > 1 ? 's' : ''} dorée${goldN > 1 ? 's' : ''} ! Touche une carte pour la voir en grand.` : owned < 3 ? 'Voici tes cartes ! Joue pour en gagner d\'autres !' : `Tu as ${owned} cartes ! Touche une carte pour la voir en grand.`);
 }
 function zoomCard(c) {
   const z = $('#zoom'); z.hidden = false;
@@ -1770,7 +2207,7 @@ function zoomCard(c) {
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('up')));
   setTimeout(() => { canTilt = true; el.classList.add('tilting'); }, 850);
   Snd.sparkle();
-  say(`${c.name}, créature ${c.el === 'eau' ? 'd\'eau' : c.el === 'eclair' ? 'éclair' : 'de ' + EL[c.el].nom} !` + (c.rar === 'o' ? ' Une carte en or !' : c.rar === 'r' ? ' Une carte rare !' : ''));
+  say(`${c.name}, créature ${c.el === 'eau' ? 'd\'eau' : c.el === 'eclair' ? 'éclair' : 'de ' + EL[c.el].nom} !` + (c.gold ? ' Une carte dorée !' : c.rar === 'o' ? ' Une carte légendaire !' : c.rar === 'r' ? ' Une carte rare !' : ''));
   const tilt = e => {
     if (!canTilt) return; const r = el.getBoundingClientRect();
     const x = clamp((e.clientX - r.left) / r.width, 0, 1), y = clamp((e.clientY - r.top) / r.height, 0, 1);
@@ -1807,7 +2244,7 @@ function openParent() {
     <div><button class="pbtn ghost" id="pTest">Tester la voix</button></div>
     <label><input type="checkbox" id="pMusic" ${S.settings.music ? 'checked' : ''}> Musique d'aventure</label>
     <label><input type="checkbox" id="pSubs" ${S.settings.subs !== false ? 'checked' : ''}> Sous-titres (affiche ce que dit la voix)</label></section>
-  <section><h3>Progrès</h3><div class="stats">Compagnon : <b>${S.companion ? myForm().name : '—'}</b> (forme ${S.stage}/3, ${S.xp} points)<br>Séances terminées : ${S.sessions} · Cartes : ${CARDS.filter(c => S.cards[c.id]).length}/${CARDS.length}<br>
+  <section><h3>Progrès</h3><div class="stats">Compagnon : <b>${S.companion ? myForm().name : '—'}</b> (forme ${S.stage}/3, ${S.xp} points)<br>Séances terminées : ${S.sessions} · Cartes : ${CARDS.filter(c => S.cards[c.id]).length}/${CARDS.length} · Cartes dorées : ${Object.values(S.gold || {}).reduce((a, b) => a + b, 0)}<br>
     ${EXOS.map(e => { const v = S.lv[e.id]; return v ? `${e.label} : niveau ${v.l}/3, ${v.ok}/${v.n} réussis du premier coup` : ''; }).filter(Boolean).join('<br>') || 'Pas encore de partie.'}</div></section>
   <section><h3>Paquets</h3><p class="small" id="pPacksTxt">${S.packs} paquet(s) en attente d'ouverture.</p><button class="pbtn ghost" id="pPacks">Supprimer les paquets en attente</button></section>
   <section><h3>Transférer la sauvegarde sur un autre téléphone</h3>
