@@ -378,7 +378,7 @@ button{font-family:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 
 @media (prefers-reduced-motion:reduce){.cloud,.holo,.rays{animation:none}}
-</style><link rel="stylesheet" href="parcours.css">
+</style><link rel="stylesheet" href="parcours.css?v=8"><link rel="stylesheet" href="cartes.css?v=8">
 </head><body>
 <div id="app">
   <svg class="cloud" style="top:7%;animation-duration:55s" width="140" height="60" viewBox="0 0 140 60" aria-hidden="true"><path d="M20 50 C0 50 0 28 20 28 C22 10 48 6 58 20 C66 4 98 4 102 24 C124 20 136 36 128 50Z" fill="#fff"/></svg>
@@ -419,7 +419,6 @@ const KEY = 'ptits-compagnons-v1';
 const EXOS = [
   { id: 'chiffres', label: 'Chiffres (reconnaître)' },
   { id: 'lettres', label: 'Lettres majuscules' },
-  { id: 'trace', label: 'Tracer rond / carré / triangle' },
   { id: 'formes', label: 'Reconnaître les formes' },
   { id: 'couleurs', label: 'Couleurs' },
   { id: 'compter', label: 'Dénombrer (1 à 5)' },
@@ -472,7 +471,8 @@ function applySaved(raw) {
   S = Object.assign(base, d);
   S.settings = Object.assign(defSettings, d.settings || {});
   S.settings.exos = Object.assign(Object.fromEntries(EXOS.map(e => [e.id, true])), (d.settings || {}).exos || {});
-  learningPath();
+  learningPath(); reconcilePath();
+  migrateCardEditions();
   if (!d.path) S.run = null;
 }
 /* ---- Code de sauvegarde (transfert vers un autre téléphone) ----
@@ -701,6 +701,7 @@ const Confetti = {
   burst(x, y, n = 60, power = 1, colors) {
     if (x == null) { x = innerWidth / 2; y = innerHeight / 3; }
     const cols = colors || ['#ff7a6b', '#ffc93c', '#7ed37a', '#5fb8ff', '#b28cff', '#ff9de2'];
+    n = Math.min(n, 80, Math.max(0,160-this.parts.length));
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, s = (3 + Math.random() * 7) * power;
       this.parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 5 * power, r: 4 + Math.random() * 5, c: pick(cols), rot: Math.random() * 6, vr: (Math.random() - .5) * .4, life: 90 + rnd(50), sh: rnd(3) });
@@ -996,7 +997,7 @@ function cardHTML(cd, o = {}) {
 }
 const GOLD_CHANCE = .12, GOLD_PITY = 6;   // ~1 paquet sur 5 au final (12 % + garantie) ; au plus 6 paquets sans carte dorée, le 7e en contient forcément une
 const GOLD_COLS = ['#fff3a0', '#ffd34d', '#ffb020', '#ffffff', '#ffe27a'];
-const goldOf = c => Object.assign({}, c, { gold: true });
+const goldOf = c => Object.assign({}, c, { gold: true, edition: 'g' });
 function rollPack() {
   const cards = [drawCard(), drawCard(), drawCard()];
   if (!S.gold) S.gold = {};
@@ -1006,7 +1007,7 @@ function rollPack() {
     for (let i = 0; i < CARDS.length; i++) { t -= w[i]; if (t <= 0) { g = CARDS[i]; break; } }
     const slot = rnd(3); cards[slot] = goldOf(g); S.gold[g.id] = (S.gold[g.id] || 0) + 1; S.goldPity = 0;
   } else S.goldPity = (S.goldPity || 0) + 1;
-  S.packs -= 1; cards.forEach(c => { if (!c.gold) S.cards[c.id] = (S.cards[c.id] || 0) + 1; }); save();
+  S.packs -= 1; cards.forEach(c => { if (!c.gold) {S.cards[c.id] = (S.cards[c.id] || 0) + 1;addCardEdition(c.id,c.edition||'c');} }); save();
   return cards;
 }
 async function goldReveal(el, c) {
@@ -1018,7 +1019,7 @@ async function goldReveal(el, c) {
   el.classList.remove('charging'); el.classList.add('up', 'gold-glow');
   el.insertAdjacentHTML('afterbegin', '<div class="rays" style="z-index:-1"></div>');
   const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-  Confetti.burst(cx, cy, 180, 1.5, GOLD_COLS); setTimeout(() => Confetti.burst(cx, cy, 110, 1.1, GOLD_COLS), 450); setTimeout(() => Confetti.rain(60), 700);
+  Confetti.burst(cx, cy, 60, 1.5, GOLD_COLS); setTimeout(() => Confetti.burst(cx, cy, 36, 1.1, GOLD_COLS), 450); setTimeout(() => Confetti.rain(20), 700);
   setTimeout(() => veil.remove(), 900);
   await say(`Waouh ! Une carte dorée ! ${c.name} doré ! C'est incroyable !`);
 }
@@ -1783,6 +1784,7 @@ function screenStart() {
   $('#bStart').onclick = () => {
     Snd.init(); Snd.sync(); Snd.tap(); guardBack(); askPersist();
     if (!S.companion) return screenChoose();
+    if (S.path?.celebrate && !S.path.complete) { delete S.path.celebrate; save(); return startSession(); }
     if (S.run && S.run.i > 0) return startSession();      // la partie interrompue reprend tout de suite
     screenHome(true);
   };
@@ -1865,19 +1867,9 @@ function longPress(el, fn) {
 /* ====================== Séance de jeu ====================== */
 const Game = { active: false, recent: [], quit: false, curResolve: null, sid: 0 };
 function planSession() {
-  const on = EXOS.filter(e => S.settings.exos[e.id]).map(e => e.id);
-  const ids = on.length ? on : ['chiffres'];
-  const n = clamp(S.settings.len || 6, 5, 8), plan = [];
-  let bag = [];
-  while (plan.length < n) {
-    if (!bag.length) bag = shuffle(ids);
-    let i = bag.findIndex(x => x !== plan[plan.length - 1] && !(x === 'trace' && plan.includes('trace')));
-    if (i < 0) { if (ids.length === 1 || (ids.length === 2 && ids.includes('trace') && plan.includes('trace'))) i = bag.findIndex(x => x !== 'trace' || !plan.includes('trace')); }
-    if (i < 0) { bag = []; if (ids.every(x => x === 'trace')) { plan.push('trace'); } continue; }
-    plan.push(bag.splice(i, 1)[0]);
-  }
-  plan[0] = 'lettres'; plan[1] = 'chiffres';
-  return plan;
+  const variety = EXOS.filter(e => S.settings.exos[e.id] && ['formes','couleurs','taille','suites','positions','puzzle','syllabes','rimes','identique','plusmoins','motifs','ranger'].includes(e.id)).map(e=>e.id);
+  const extras=shuffle(variety.length?variety:['formes','couleurs']).slice(0,2);
+  return ['lettres','chiffres','lettres',extras[0],'chiffres','lettres',extras[1]||'couleurs','chiffres'];
 }
 function makeQuestion(type) {
   const pq = pathQuestion(type); if (pq) return pq;
@@ -1892,16 +1884,17 @@ function mascotCheer() {
   m.classList.remove('hop'); void m.offsetWidth; m.classList.add('hop'); setTimeout(() => svg.classList.remove('happy'), 1600);
 }
 async function startSession() {
+  reconcilePath();
   if (!ensurePathLessons(startSession)) return;
   const s = $('#s-game'); show('s-game');
   if (Game.active) quitSession(true);
   const sid = ++Game.sid; const gone = () => Game.quit || sid !== Game.sid;
   Game.active = true; Game.quit = false; let quitArm = 0;
   const valid = t => (t === 'trace' || GEN[t]) && (S.settings.exos[t] || ['lettres','chiffres'].includes(t));
-  const resume = S.run && Array.isArray(S.run.plan) && S.run.i > 0 && S.run.i < S.run.plan.length && S.run.plan.every(valid);
+  const resume = S.run && S.run.recognitionVersion === 2 && S.run.level === learningPath().level && Array.isArray(S.run.plan) && S.run.i > 0 && S.run.i < S.run.plan.length && S.run.plan.every(valid);
   const plan = resume ? S.run.plan : planSession();
   const i0 = resume ? S.run.i : 0;
-  S.run = { plan, i: i0 }; save();
+  S.run = { plan, i: i0, level:learningPath().level, recognitionVersion:2 }; save();
   s.innerHTML = `<div class="topbar"><button class="big round" id="bHome" aria-label="Accueil">${IC.home}</button>
       <div class="mid"><div class="dots">${plan.map(() => '<span class="dot"></span>').join('')}</div></div>
       <button class="big round" id="bSay" aria-label="Réécouter">${IC.speak}</button></div>
@@ -1923,12 +1916,15 @@ async function startSession() {
     const stage = $('#stage');
     let r;
     if (q.special === 'trace') { r = await runTrace(q, stage, lvl('trace').l); }
+    else if (q.special === 'recognitionMulti') r = await runRecognitionMulti(q,stage);
     else if (q.special === 'order') r = await runOrder(q, stage);
     else r = await runChoice(q, stage);
     if (gone()) return;
     if (q.special === 'trace') await Battle.attack(r.first);
     record(type, r.first); recordPath(q, r.first);
-    const xp = r.first ? 10 : 5; gained += xp; S.xp += xp; S.run = { plan, i: i + 1 }; save();
+    const xp = r.first ? 10 : 5; gained += xp; S.xp += xp; S.run = { plan, i: i + 1, level:learningPath().level, recognitionVersion:2 };
+    if (pathNeedsAdvance()) { const old=learningPath().level; pathAdvance(); S.path.celebrate=old; save(); break; }
+    save();
     await sleep(350);
   }
   if (gone()) return;
@@ -1937,8 +1933,8 @@ async function startSession() {
   if (gone()) return;
   S.xp += 10; S.packs += 1; S.sessions += 1; S.run = null; save();
   Game.active = false;
-  if (pathNeedsAdvance()) {
-    const old = learningPath().level; pathAdvance(); Snd.win(); Confetti.burst(null,null,100);
+  if (S.path.celebrate) {
+    const old = S.path.celebrate; delete S.path.celebrate; save(); Snd.win(); Confetti.burst(null,null,100);
     $('#stage').innerHTML = `<div class="path-page"><h1>⭐ Bravo !</h1><div class="path-pet">${petHTML(true)}</div><p>${PATH_LETTERS[old-1]} et ${old} sont apprivoisés !</p><button class="path-btn primary" id="pathContinue">${old===10?'Mon chemin ⭐':'Découvrir la suite ▶'}</button><button class="path-btn" id="pathLater">À la maison</button></div>`;
     $('#pathContinue').onclick = () => old===10 ? showPath() : startSession();
     $('#pathLater').onclick = () => screenEnd();
@@ -2076,13 +2072,13 @@ async function screenEnd() {
   s.innerHTML = `<div class="topbar"><div></div>${musicBtn()}</div>
     <div class="home-stage"><div class="pet s${S.stage}" id="endpet">${petHTML(true)}</div>
     <div class="row" style="gap:10px">${IC.star().replace('<svg', '<svg style="width:44px"').repeat(3)}</div></div>
-    <div class="home-actions"><div class="row"><button class="big square" id="bHome2" aria-label="Accueil">${IC.home}</button>
+    <p class="lbl" style="text-align:center">${pathReady()?`On continue à apprivoiser ${pathCurrent('letter')} et ${learningPath().level}.`:`Prochaine découverte : ${pathCurrent('letter')} et ${learningPath().level} !`}</p><div class="home-actions"><div class="row"><button class="big square" id="bHome2" aria-label="Accueil">${IC.home}</button>
     <button class="big play wiggle" id="bOpen" style="width:160px" aria-label="Ouvrir le paquet">${IC.pack.replace('<svg', '<svg style="width:70px;height:70px"')}</button></div></div>`;
   bindMusic(s);
   Snd.win(); Confetti.rain(140);
   $('#bHome2').onclick = () => { Snd.tap(); screenHome(false); };
   $('#bOpen').onclick = () => { Snd.tap(); screenPack(); };
-  await say(`Bravo${S.name ? ' ' + S.name : ''} ! Tu as tout fini ! Tu as gagné un paquet de cartes !`);
+  await say(`Bravo${S.name ? ' ' + S.name : ''} ! Tu as terminé cette partie et gagné un paquet de cartes !`);
   const ns = stageFor(S.xp);
   if (ns > S.stage && !Evo.busy) { await evolve(ns); screenEnd2(); }
 }
@@ -2176,11 +2172,11 @@ function screenPack() {
       if (c.gold) { await goldReveal(el, c); flipped++; }
       else { el.classList.add('up'); flipped++; }
       if (c.gold) { }
-      else if (c.rar === 'o') {
-        Snd.gold(); el.classList.add('gold-glow'); const r = el.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 2, 120, 1.2);
+      else if (c.edition === 'u') {
+        el.classList.add('reveal-ultra'); Snd.gold(); el.classList.add('gold-glow'); const r = el.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 2, 60, 1.2);
         el.insertAdjacentHTML('afterbegin', '<div class="rays" style="z-index:-1"></div>');
-        await say(`Waouh ! Une carte légendaire ! ${c.name} ! C'est incroyable !`);
-      } else if (c.rar === 'r') { Snd.sparkle(); setTimeout(() => Snd.sparkle(), 200); await say(`Une carte rare ! ${c.name} !`); }
+        await say(`Waouh ! Une carte ultra rare ! ${c.name} ! C'est incroyable !`);
+      } else if (c.edition === 'r') { el.classList.add('reveal-rare'); Snd.sparkle(); setTimeout(() => Snd.sparkle(), 200); await say(`Une carte rare ! ${c.name} !`); }
       else { Snd.sparkle(); await say(c.name + ' !'); }
       if (flipped === 3) {
         const a = $('#pafter');
@@ -2224,7 +2220,7 @@ function zoomCard(c) {
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('up')));
   setTimeout(() => { canTilt = true; el.classList.add('tilting'); }, 850);
   Snd.sparkle();
-  say(`${c.name}, créature ${c.el === 'eau' ? 'd\'eau' : c.el === 'eclair' ? 'éclair' : 'de ' + EL[c.el].nom} !` + (c.gold ? ' Une carte dorée !' : c.rar === 'o' ? ' Une carte légendaire !' : c.rar === 'r' ? ' Une carte rare !' : ''));
+  say(`${c.name}, créature ${c.el === 'eau' ? 'd\'eau' : c.el === 'eclair' ? 'éclair' : 'de ' + EL[c.el].nom} !` + (c.gold ? ' Une carte dorée !' : c.rar === 'o' ? ' Une carte ultra rare !' : c.rar === 'r' ? ' Une carte rare !' : ''));
   const tilt = e => {
     if (!canTilt) return; const r = el.getBoundingClientRect();
     const x = clamp((e.clientX - r.left) / r.width, 0, 1), y = clamp((e.clientY - r.top) / r.height, 0, 1);
@@ -2334,7 +2330,7 @@ function guardBack() {
 /* Demande au navigateur de ne jamais effacer la sauvegarde */
 function askPersist() { try { navigator.storage && navigator.storage.persist && navigator.storage.persist().catch(() => { }); } catch (e) { } }
 async function boot() {
-  await loadBest(); Voice.init(); Confetti.init();
+  await loadBest(); reconcilePath(); migrateCardEditions(); Voice.init(); Confetti.init();
   S.stage = S.companion ? Math.max(S.stage, 1) : 1;
   screenStart();
   addEventListener('pagehide', save);
@@ -2344,6 +2340,8 @@ async function boot() {
   }
 }
 </script>
-<script src="parcours.js"></script>
+<script src="parcours.js?v=8"></script>
+<script src="reconnaissance.js?v=8"></script>
+<script src="cartes.js?v=8"></script>
 <script>boot();
 </script></body></html>
