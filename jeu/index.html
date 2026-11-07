@@ -378,7 +378,8 @@ button{font-family:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 
 @media (prefers-reduced-motion:reduce){.cloud,.holo,.rays{animation:none}}
-</style></head><body>
+</style><link rel="stylesheet" href="parcours.css">
+</head><body>
 <div id="app">
   <svg class="cloud" style="top:7%;animation-duration:55s" width="140" height="60" viewBox="0 0 140 60" aria-hidden="true"><path d="M20 50 C0 50 0 28 20 28 C22 10 48 6 58 20 C66 4 98 4 102 24 C124 20 136 36 128 50Z" fill="#fff"/></svg>
   <svg class="cloud" style="top:20%;animation-duration:75s;animation-delay:-30s" width="100" height="44" viewBox="0 0 140 60" aria-hidden="true"><path d="M20 50 C0 50 0 28 20 28 C22 10 48 6 58 20 C66 4 98 4 102 24 C124 20 136 36 128 50Z" fill="#fff"/></svg>
@@ -446,6 +447,7 @@ function defaultState() {
     settings: { exos: Object.fromEntries(EXOS.map(e => [e.id, true])), rate: 0.9, music: true, len: 6, voice: '', start: 1, subs: true },
     lv: {}, firstRun: true,
     gold: {}, goldPity: 0,
+    path: null,
   };
 }
 let S = defaultState();
@@ -470,6 +472,8 @@ function applySaved(raw) {
   S = Object.assign(base, d);
   S.settings = Object.assign(defSettings, d.settings || {});
   S.settings.exos = Object.assign(Object.fromEntries(EXOS.map(e => [e.id, true])), (d.settings || {}).exos || {});
+  learningPath();
+  if (!d.path) S.run = null;
 }
 /* ---- Code de sauvegarde (transfert vers un autre téléphone) ----
    Format : PC1-<somme de contrôle>-<données>  (données = JSON compressé puis base64url) */
@@ -1485,7 +1489,7 @@ Object.assign(GEN, {
   },
   /* Calcul : ranger dans l'ordre (du plus petit au plus grand, ou 1-2-3...) */
   ranger(L) {
-    const bySize = L === 1 ? Math.random() < .6 : Math.random() < .5;
+    const bySize = learningPath().level < 3 || Math.random() < .6;
     if (bySize) {
       const n = L === 3 ? 4 : 3, sizes = n === 3 ? [.5, .75, 1] : [.48, .65, .82, 1], desc = L === 3 && Math.random() < .5, useCrt = Math.random() < .5, col = COLORS[pick(['rouge', 'bleu', 'vert', 'violet', 'orange'])];
       const items = shuffle(sizes.map((sz, i) => ({
@@ -1500,7 +1504,7 @@ Object.assign(GEN, {
         okSay: desc ? 'Bravo ! Du plus grand au plus petit !' : 'Bravo ! Du plus petit au plus grand !',
       };
     }
-    const n = L === 1 ? 3 : L === 2 ? 4 : 5, st = L === 3 ? 1 + rnd(3) : 1, vals = Array.from({ length: n }, (_, i) => st + i), c = cols6();
+    const n = Math.min(learningPath().level, L === 1 ? 3 : L === 2 ? 4 : 5), st = 1, vals = Array.from({ length: n }, (_, i) => st + i), c = cols6();
     const items = shuffle(vals.map((v, i) => ({ rank: i, v, html: `<span class="glyph" style="color:${c[i]}">${v}</span>` })));
     return {
       special: 'order', key: 'rn' + n + st, items, cols: n === 4 ? 2 : 3,
@@ -1823,6 +1827,7 @@ function screenHome(greet) {
       <div class="xpbar" role="img" aria-label="${hi ? `${filled} étoiles sur 5 avant la prochaine évolution` : 'Forme finale atteinte !'}">${Array.from({ length: 5 }, (_, i) => `<span class="st${i < filled ? ' on' : ''}" style="animation-delay:${.3 + i * .12}s">${IC.star(i < filled ? (st === 3 ? '#ffb020' : '#ffc93c') : '#ffffff')}</span>`).join('')}</div>
     </div>
     <div class="home-actions">
+      <button class="path-btn" id="bPath">🌱 Mon chemin · ${pathCurrent('letter')} et ${learningPath().level}</button>
       <div class="btn-col"><button class="big play" id="bPlay" aria-label="Jouer">${IC.play}</button><span class="lbl" aria-hidden="true">Jouer</span></div>
       <div class="row">
         <div class="btn-col"><button class="big square" id="bCards" aria-label="Mes cartes">${IC.cards}</button><span class="lbl" aria-hidden="true">Mes cartes</span></div>
@@ -1837,6 +1842,7 @@ function screenHome(greet) {
     const r = pet.getBoundingClientRect(); Confetti.burst(r.left + r.width / 2, r.top + r.height / 3, 18, .6);
     say(pick(PET_LINES())).then(() => svg.classList.remove('happy'));
   };
+  $('#bPath').onclick = showPath;
   $('#bPlay').onclick = () => { Snd.tap(); startSession(); };
   $('#bCards').onclick = () => { Snd.tap(); screenCards(); };
   if ($('#bPack')) $('#bPack').onclick = () => { Snd.tap(); screenPack(); };
@@ -1870,10 +1876,12 @@ function planSession() {
     if (i < 0) { bag = []; if (ids.every(x => x === 'trace')) { plan.push('trace'); } continue; }
     plan.push(bag.splice(i, 1)[0]);
   }
+  plan[0] = 'lettres'; plan[1] = 'chiffres';
   return plan;
 }
 function makeQuestion(type) {
-  const L = lvl(type).l;
+  const pq = pathQuestion(type); if (pq) return pq;
+  const L = Math.min(lvl(type).l, Math.ceil(learningPath().level/4), type === 'identique' ? 2 : 3);
   if (type === 'trace') return traceQuestion(L, Game.recent);
   let q;
   for (let k = 0; k < 14; k++) { q = GEN[type](L); if (!Game.recent.includes(q.key)) break; }
@@ -1884,11 +1892,12 @@ function mascotCheer() {
   m.classList.remove('hop'); void m.offsetWidth; m.classList.add('hop'); setTimeout(() => svg.classList.remove('happy'), 1600);
 }
 async function startSession() {
+  if (!ensurePathLessons(startSession)) return;
   const s = $('#s-game'); show('s-game');
   if (Game.active) quitSession(true);
   const sid = ++Game.sid; const gone = () => Game.quit || sid !== Game.sid;
   Game.active = true; Game.quit = false; let quitArm = 0;
-  const valid = t => (t === 'trace' || GEN[t]) && S.settings.exos[t];
+  const valid = t => (t === 'trace' || GEN[t]) && (S.settings.exos[t] || ['lettres','chiffres'].includes(t));
   const resume = S.run && Array.isArray(S.run.plan) && S.run.i > 0 && S.run.i < S.run.plan.length && S.run.plan.every(valid);
   const plan = resume ? S.run.plan : planSession();
   const i0 = resume ? S.run.i : 0;
@@ -1918,7 +1927,7 @@ async function startSession() {
     else r = await runChoice(q, stage);
     if (gone()) return;
     if (q.special === 'trace') await Battle.attack(r.first);
-    record(type, r.first);
+    record(type, r.first); recordPath(q, r.first);
     const xp = r.first ? 10 : 5; gained += xp; S.xp += xp; S.run = { plan, i: i + 1 }; save();
     await sleep(350);
   }
@@ -1928,6 +1937,14 @@ async function startSession() {
   if (gone()) return;
   S.xp += 10; S.packs += 1; S.sessions += 1; S.run = null; save();
   Game.active = false;
+  if (pathNeedsAdvance()) {
+    const old = learningPath().level; pathAdvance(); Snd.win(); Confetti.burst(null,null,100);
+    $('#stage').innerHTML = `<div class="path-page"><h1>⭐ Bravo !</h1><div class="path-pet">${petHTML(true)}</div><p>${PATH_LETTERS[old-1]} et ${old} sont apprivoisés !</p><button class="path-btn primary" id="pathContinue">${old===10?'Mon chemin ⭐':'Découvrir la suite ▶'}</button><button class="path-btn" id="pathLater">À la maison</button></div>`;
+    $('#pathContinue').onclick = () => old===10 ? showPath() : startSession();
+    $('#pathLater').onclick = () => screenEnd();
+    say('Bravo ! Tu connais bien cette lettre et ce nombre ! Un nouveau pas t’attend.');
+    return;
+  }
   screenEnd();
 }
 function quitSession(silent) {
@@ -2226,7 +2243,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#zoom').hidden)
 function openParent() {
   Voice.stop(); const p = $('#parent'); p.hidden = false;
   const voices = Voice.list;
-  p.innerHTML = `<h2>Espace parent</h2>
+  p.innerHTML = `<h2>Espace parent</h2>${pathParentSection()}
   <section><h3>Enfant</h3>
     <label for="pName" style="display:block">Prénom (sert pour les lettres et les encouragements)</label>
     <input type="text" id="pName" maxlength="20" value="${(S.name || '').replace(/"/g, '&quot;')}" autocomplete="off">
@@ -2257,6 +2274,7 @@ function openParent() {
     <p class="small" id="pLoadMsg" aria-live="polite"></p></section>
   <section><h3>Remise à zéro</h3><p class="small">Efface le compagnon, les cartes, les points et les réglages.</p><button class="pbtn warn" id="pReset">Tout remettre à zéro</button><span id="pConfirm" hidden><button class="pbtn warn" id="pReset2">Oui, tout effacer</button><button class="pbtn ghost" id="pCancel">Annuler</button></span></section>
   <button class="pbtn" id="pClose" style="font-size:18px;padding:14px 22px;margin-bottom:30px">Retour au jeu</button>`;
+  bindPathParent();
   $('#pRate').oninput = e => { $('#pRateV').textContent = (+e.target.value).toFixed(2); };
   const apply = () => {
     S.name = $('#pName').value.trim().slice(0, 20);
@@ -2325,5 +2343,7 @@ async function boot() {
     navigator.serviceWorker.register('sw.js').catch(() => { });
   }
 }
-boot();
+</script>
+<script src="parcours.js"></script>
+<script>boot();
 </script></body></html>
